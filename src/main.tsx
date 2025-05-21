@@ -5,12 +5,15 @@ import 'animate.css';
 // import './assets/fonts/WEB/css/satoshi.css'
 import GameRoutes from "./router/Router.tsx";
 import {BrowserRouter} from "react-router-dom";
-// import App from './App.tsx'
+import {Provider} from "react-redux";
+import { store } from '@/store';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
-          <GameRoutes/>
+          <Provider store={store}>
+            <GameRoutes/>
+          </Provider>
       </BrowserRouter>
   </StrictMode>,
 )

@@ -26,6 +26,9 @@
     font-display: swap;
     font-style: normal;
 }
+body{
+    font-family: 'Satoshi-Regular', sans-serif;
+}
 .date-or-disaster {
     background-image:
             radial-gradient(circle, #BB63FF, #5B58EB),
