@@ -6,27 +6,44 @@ export interface Question{
     options:[],
     category:string
 }
+export interface DaterType{
+    characterName: string,
+    description:string,
+    criteria:object
+}
 
 interface QuestionsState {
     data: Question[];
     loading: boolean;
     error: string | null;
+    character: DaterType
 }
 const initialState: QuestionsState = {
     data: [],
     loading: false,
     error: null,
+    character: {} as DaterType
+
 }
 
 export const fetchQuestions = createAsyncThunk(
     'questions/fetchQuestions',
     async ()=>{
-        const response = await fetch('http://localhost:8000/questions');
+        const response = await fetch('https://twitter-game-backend.onrender.com/questions');
         if(!response.ok){
             throw new Error('Failed to fetch questions');
         }
         return (await response.json()) as Question[];
-
+    }
+)
+export const getDaterType = createAsyncThunk(
+    'questions/getDaterType',
+    async ()=>{
+        const response = await fetch('https://twitter-game-backend.onrender.com/questions/dater-type');
+        if(!response.ok){
+            throw new Error('Failed to fetch questions');
+        }
+        return (await response.json()) as Question[];
     }
 )
 const questionsSlice = createSlice({

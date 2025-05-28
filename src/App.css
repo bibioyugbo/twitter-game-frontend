@@ -29,11 +29,36 @@
 body{
     font-family: 'Satoshi-Regular', sans-serif;
 }
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.4s ease-in-out;
+}
+/*.date-or-disaster {*/
+/*    background-image:*/
+/*            radial-gradient(circle, #BB63FF, #5B58EB),*/
+/*            url("./assets/images/date-or-disaster.jpg");*/
+/*    opacity: 80%;*/
+/*    background-size: cover;*/
+/*    background-position: center;*/
+/*    !*background-blend-mode: overlay;*!*/
+/*    background-repeat: no-repeat;*/
+/*    height: 100vh;*/
+/*}*/
+@media screen and (max-width: 500px){
+    .date-or-disaster {
+        background-image: url("./assets/images/mobile-bg.svg")!important;
+    }
+}
 .date-or-disaster {
     background-image:
-            radial-gradient(circle, #BB63FF, #5B58EB),
-            url("./assets/images/date-or-disaster.jpg");
-    opacity: 80%;
+            url("./assets/images/web-bg.svg");
     background-size: cover;
     background-position: center;
     /*background-blend-mode: overlay;*/

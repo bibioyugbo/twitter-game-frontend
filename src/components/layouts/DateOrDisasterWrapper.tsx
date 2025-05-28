@@ -13,7 +13,7 @@ export default function DateOrDisasterWrapper({...props}:DateOrDisasterWrapperPr
             {/*<div className={"bg-gradient-to-br h-screen from-yellow-200 via-yellow-400 to-yellow-600"}>*/}
             {/*    {children}*/}
             {/*</div>*/}
-            <div style={props.style} className={'date-or-disaster p-8 flex items-center flex-col justify-center w-full h-screen'}>
+            <div style={props.style} className={'date-or-disaster p-5 flex items-center flex-col justify-center w-full h-screen'}>
                 {props.children}
             </div>
         </>

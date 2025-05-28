@@ -2,7 +2,7 @@ import DateOrDisasterWrapper from "../../layouts/DateOrDisasterWrapper.tsx";
 import dateIcon from "../../../assets/images/title-icon.svg"
 import DefaultButton from "../../button/DefaultButton.tsx";
 import {useNavigate} from "react-router-dom";
-import {fetchQuestions} from "@/store/modules/questionSlice.ts";
+import {fetchQuestions, selectQuestionsLoading} from "@/store/modules/questionSlice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store";
 
@@ -36,7 +36,6 @@ export default function DateOrDisasterLandingPage(){
                 </div>
                 <footer style={{ marginTop: "auto" }} className={"text-white"}>Made with ❤️ by <span className={"underline"}>Adaeze</span> and <span className={"underline"}>Bibi</span></footer>
             </DateOrDisasterWrapper>
-
         </>
     )
 }
