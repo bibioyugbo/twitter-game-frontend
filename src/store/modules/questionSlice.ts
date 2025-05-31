@@ -27,13 +27,11 @@ interface QuestionsState {
     data: Question[];
     loading: boolean;
     error: string | null;
-    // daterType: DaterType,
 }
 const initialState: QuestionsState = {
     data: [],
     loading: false,
     error: null,
-    // daterType: {} as DaterType,
 
 }
 // daterTypeSlice.ts
@@ -53,8 +51,7 @@ const daterTypeInitialState: DaterTypeState = {
 export const fetchQuestions = createAsyncThunk(
     'questions/fetchQuestions',
     async ()=>{
-        // const response = await fetch('https://twitter-game-backend.onrender.com/questions');
-        const response = await fetch('http://localhost:8000/questions');
+        const response = await fetch('https://twitter-game-backend.onrender.com/questions');
         if(!response.ok){
             throw new Error('Failed to fetch questions');
         }
@@ -65,9 +62,9 @@ export const getDaterType = createAsyncThunk(
     'daterType/getDaterType',
     async (formData: DaterTypeRequest, thunkAPI) => {
         try {
-            const response = await fetch('http://localhost:8000/questions/dater-type', {
-                // const response = await fetch('https://twitter-game-backend.onrender.com/questions/dater-type', {
-                method: 'POST',
+                const response = await fetch('https://twitter-game-backend.onrender.com/questions/dater-type', {
+                    // const response = await fetch('http://localhost:8000/questions/dater-type', {
+                    method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -130,6 +127,7 @@ const daterTypeSlice = createSlice({
 
 export const selectQuestions = (state: RootState) => state.questions.data;
 export const dataType = (state: RootState) => state.daterType.daterType;
+export const dataTypeLoading = (state: RootState) => state.daterType.loading;
 export const selectQuestionsLoading = (state: RootState) => state.questions.loading;
 export const selectQuestionsError = (state: RootState) => state.questions.error;
 // export const daterTypeReducer = daterTypeSlice.reducer;

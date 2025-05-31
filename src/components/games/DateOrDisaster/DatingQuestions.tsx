@@ -33,29 +33,7 @@ export default function DatingQuestions(){
     const [currentPage, setCurrentPage] = useState(0);
     const currentQuestions2 = questionsToMap.slice(currentPage, currentPage+1);
 
-    function goToNextQuestion(){
-        if(Object.keys(selectedOptions).length===0){
-            setIsNotSelected((prevState)=>!prevState)
-            return;
-        }
-        else if (questionCount < 8){
-            console.log("Bibi was here")
-            setQuestionCount(questionCount + 1)
-            setCurrentPage(prev => prev + 1)
-            updateProgress()
-        }
-        else {
-            console.log("Your selected object:",selectedOptions)
-            getDataType()
-        }
-
-    }
-    function getLetter(index: number | null | undefined): string {
-        return index !== undefined && index !== null
-            ? String.fromCharCode(65 + index) // 0 => "A", 1 => "B", etc.
-            : "";
-    }
-    function getDataType() {
+    function getCharacter() {
         const body: DaterTypeRequest = {
             q1: getLetter(selectedOptions[0]),
             q2: getLetter(selectedOptions[1]),
@@ -69,8 +47,30 @@ export default function DatingQuestions(){
         console.log("User answers:", body);
         dispatch(getDaterType(body));
         navigate("/date-or-disaster")
+    }
+    function goToNextQuestion(){
+        if(Object.keys(selectedOptions).length===0){
+            setIsNotSelected((prevState)=>!prevState)
+            return;
+        }
+        else if (questionCount < 8){
+            console.log("Bibi was here")
+            setQuestionCount(questionCount + 1)
+            setCurrentPage(prev => prev + 1)
+            updateProgress()
+        }
+        else {
+            console.log("Your selected object:",selectedOptions)
+            getCharacter()
+        }
 
     }
+    function getLetter(index: number | null | undefined): string {
+        return index !== undefined && index !== null
+            ? String.fromCharCode(65 + index) // 0 => "A", 1 => "B", etc.
+            : "";
+    }
+
 
     function optionClicked(questionIndex: number, optionIndex: number){
         const clickSound = new Audio ('/select-sound-121244.mp3')
@@ -97,8 +97,8 @@ export default function DatingQuestions(){
                             {"0" + questionCount} of 08
                         </div>
                         <Progress style={{marginTop:"16px", marginBottom:"16px"}} value={progress} className="h-[21px]"/>
-                        <div className="bg-[#EBEBEB4D] md:h-[540px] md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
-                            <div className="bg-white px-5 py-10 md:max-w-[476px] md:h-[508px] rounded-[32px]">
+                        <div className="bg-[#EBEBEB4D]  md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
+                            <div className="bg-white px-5 py-10 md:max-w-[476px]  rounded-[32px]">
                                 {currentQuestions2?.map((item:Question,questionIndex)=>{
                                     console.log(currentQuestions2)
                                     return(
