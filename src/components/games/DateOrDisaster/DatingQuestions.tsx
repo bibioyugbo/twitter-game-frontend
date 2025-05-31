@@ -1,31 +1,37 @@
 import DateOrDisasterWrapper from "../../layouts/DateOrDisasterWrapper.tsx";
 import DefaultButton from "../../button/DefaultButton.tsx";
 import { Progress } from "@/components/ui/progress"
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Loader from "@/components/loader/Loader.tsx";
-import {useSelector} from "react-redux";
-import {Question, selectQuestions, selectQuestionsLoading} from "@/store/modules/questionSlice.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {
+    DaterTypeRequest,
+    getDaterType,
+    Question,
+    selectQuestions,
+    selectQuestionsLoading
+} from "@/store/modules/questionSlice.ts";
+import {AppDispatch} from "@/store";
 
 
 export default function DatingQuestions(){
 
     const [progress, setProgress] = useState(12.5)
-    const [loader, setLoader] = useState(false)
     const [isNotSelected, setIsNotSelected] = useState(false)
     const loading = useSelector(selectQuestionsLoading);
-    const [currentPage, setCurrentPage] = useState(0);
-    const questionsPerPage = 1;
     const [questionCount, setQuestionCount] = useState(1)
     const navigate = useNavigate()
     const questions = useSelector(selectQuestions);
     const [selectedOptions, setSelectedOptions] = useState<{ [questionIndex: number]: number | null }>({});
-    const startIndex = currentPage * questionsPerPage;
-    const endIndex = startIndex + questionsPerPage;
     const questionsToMap = questions
-    const currentQuestions = questionsToMap.slice(startIndex, endIndex);
-    const currentQuestions2 = questionsToMap.slice(currentPage, currentPage+1);
+    const dispatch = useDispatch<AppDispatch>();
 
+    function updateProgress(){
+        setProgress(progress + 12.5)
+    }
+    const [currentPage, setCurrentPage] = useState(0);
+    const currentQuestions2 = questionsToMap.slice(currentPage, currentPage+1);
 
     function goToNextQuestion(){
         if(Object.keys(selectedOptions).length===0){
@@ -33,40 +39,62 @@ export default function DatingQuestions(){
             return;
         }
         else if (questionCount < 8){
-            setSelectedOptions({})
+            console.log("Bibi was here")
             setQuestionCount(questionCount + 1)
             setCurrentPage(prev => prev + 1)
-            setProgress(progress + 12.5)
+            updateProgress()
         }
-        else
-        navigate("/date-or-disaster")
+        else {
+            console.log("Your selected object:",selectedOptions)
+            getDataType()
+        }
+
     }
+    function getLetter(index: number | null | undefined): string {
+        return index !== undefined && index !== null
+            ? String.fromCharCode(65 + index) // 0 => "A", 1 => "B", etc.
+            : "";
+    }
+    function getDataType() {
+        const body: DaterTypeRequest = {
+            q1: getLetter(selectedOptions[0]),
+            q2: getLetter(selectedOptions[1]),
+            q3: getLetter(selectedOptions[2]),
+            q4: getLetter(selectedOptions[3]),
+            q5: getLetter(selectedOptions[4]),
+            q6: getLetter(selectedOptions[5]),
+            q7: getLetter(selectedOptions[6]),
+            q8: getLetter(selectedOptions[7]),
+        };
+        console.log("User answers:", body);
+        dispatch(getDaterType(body));
+        navigate("/date-or-disaster")
+
+    }
+
     function optionClicked(questionIndex: number, optionIndex: number){
         const clickSound = new Audio ('/select-sound-121244.mp3')
         clickSound.play()
         setSelectedOptions((prev=>({
             ...prev,
-               [questionIndex]:optionIndex
+               [currentPage]:optionIndex
         })))
-        // setSelectedOptions({[questionIndex]:optionIndex})
         console.log("Question Index",questionIndex)
         console.log("Option Index",optionIndex)
         console.log("Selected options",selectedOptions)
     }
 
-    useEffect(() => {
-        console.log("Selected options updated", selectedOptions);
-    }, [selectedOptions]);
+
 
 
     return(
         <>
             <DateOrDisasterWrapper>
-                { loading?
+                {loading?
                     <Loader showLoader={loading}/>:
                     <div className=" h-full items-center justify-center flex flex-col gap-4">
                         <div className="text-white font-[Satoshi-Bold] text-xl">
-                            {"0" + questionCount} of 8
+                            {"0" + questionCount} of 08
                         </div>
                         <Progress style={{marginTop:"16px", marginBottom:"16px"}} value={progress} className="h-[21px]"/>
                         <div className="bg-[#EBEBEB4D] md:h-[540px] md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
@@ -80,11 +108,11 @@ export default function DatingQuestions(){
                                             </div>
                                             <div className={"text-[#646363] font-[Satoshi-Bold] cursor-pointer mt-9 flex flex-col gap-2 text-[16px] "}>
                                                 {item.options.map((item, optionIndex)=>{
-                                                    const isSelected =  selectedOptions[questionIndex] === optionIndex;
+                                                    const isSelected =  selectedOptions[currentPage] === optionIndex;
                                                     // console.log(optionIndex)
-                                                    console.log(selectedOptions[questionIndex])
+                                                    console.log("Selected options is:",selectedOptions[currentPage])
                                                     return(
-                                                        <a key={optionIndex} onClick={()=>optionClicked(questionIndex, optionIndex)} className={`${isSelected?"border-[#11A401] flex text-[#11A401]":"border-[#F1F1F1]"} flex gap-1 rounded-[12px] p-5 border-2`}>
+                                                        <a key={optionIndex} onClick={()=>optionClicked(currentPage, optionIndex)} className={`${isSelected?"border-[#11A401] flex text-[#11A401]":"border-[#F1F1F1]"} flex gap-1 rounded-[12px] p-5 border-2`}>
                                                             <div>{String.fromCharCode(97 + optionIndex)}</div>
                                                             <span>-</span>
                                                             {item}

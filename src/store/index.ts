@@ -1,9 +1,10 @@
 import {configureStore} from "@reduxjs/toolkit";
-import questionsReducer from './modules/questionSlice.ts';
+import {questionsReducer, daterTypeReducer} from './modules/questionSlice.ts';
 
 export const store= configureStore({
     reducer: {
         questions: questionsReducer,
+        daterType: daterTypeReducer
         // add more slices here
     },
     }

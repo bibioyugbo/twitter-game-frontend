@@ -2,7 +2,7 @@ import DateOrDisasterWrapper from "../../layouts/DateOrDisasterWrapper.tsx";
 import dateIcon from "../../../assets/images/title-icon.svg"
 import DefaultButton from "../../button/DefaultButton.tsx";
 import {useNavigate} from "react-router-dom";
-import {fetchQuestions, selectQuestionsLoading} from "@/store/modules/questionSlice.ts";
+import {fetchQuestions} from "@/store/modules/questionSlice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store";
 
