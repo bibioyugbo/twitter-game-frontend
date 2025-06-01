@@ -97,21 +97,21 @@ export default function DatingQuestions(){
             <DateOrDisasterWrapper>
                 {loading?
                     <Loader showLoader={loading}/>:
-                    <div className=" h-full items-center justify-center flex flex-col gap-4">
-                        <div className="text-white font-[Satoshi-Bold] text-xl">
+                    <div className=" items-center justify-center flex flex-col gap-4">
+                        <div className="text-white font-[Satoshi-Bold] text-base md:text-xl">
                             {"0" + questionCount} of 08
                         </div>
                         <Progress style={{marginTop:"16px", marginBottom:"16px"}} value={progress} className="h-[21px]"/>
-                        <div className="bg-[#EBEBEB4D] w-[350px] md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
+                        <div className="bg-[#EBEBEB4D] w-full md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
                             <div className="bg-white px-5 py-5 md:max-w-[476px]  rounded-[32px]">
                                 {currentQuestions2?.map((item:Question,questionIndex)=>{
                                     console.log(currentQuestions2)
                                     return(
                                         <div key={questionIndex}>
-                                            <div className={"text-[#003A58] font-[Satoshi-Bold] text-xl my-4"}>
+                                            <div className={"text-[#003A58] font-[Satoshi-Bold] text-base md:text-xl my-4"}>
                                                 {item.question}
                                             </div>
-                                            <div className={"text-[#646363] font-[Satoshi-Bold] cursor-pointer mt-9 flex flex-col gap-2 text-[16px] "}>
+                                            <div className={"text-[#646363] font-[Satoshi-Bold] cursor-pointer mt-9 flex flex-col gap-2 text-sm md:text-base "}>
                                                 {item.options.map((item, optionIndex)=>{
                                                     const isSelected =  selectedOptions[currentPage] === optionIndex;
                                                     // console.log(optionIndex)
@@ -130,7 +130,7 @@ export default function DatingQuestions(){
                                 })}
                             </div>
                         </div>
-                        <DefaultButton shake={isNotSelected} customClass={`w-full max-w-[232px] md:max-w-[444px]`}  style={{marginTop:"36px"}} onClick={()=>goToNextQuestion()} text={questionCount===8?"What Dater are you?":"Continue"} />
+                        <DefaultButton shake={isNotSelected} customClass={`w-full max-w-[232px] md:max-w-[444px] bottom-[calc(20px+env(safe-area-inset-bottom))]`}  style={{marginTop:"36px"}} onClick={()=>goToNextQuestion()} text={questionCount===8?"What Dater are you?":"Continue"} />
                     </div>
                 }
             </DateOrDisasterWrapper>

@@ -37,7 +37,14 @@
 }
 body{
     font-family: 'Satoshi-Regular', sans-serif;
+    /*padding-top: env(safe-area-inset-top)!important;*/
+    /*padding-bottom: env(safe-area-inset-bottom)!important;*/
 }
+/*.bottom-fixed{*/
+/*    position: fixed;*/
+/*    bottom: env(safe-area-inset-bottom);*/
+/*    padding-bottom: env(safe-area-inset-bottom);*/
+/*}*/
 @keyframes shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-6px); }

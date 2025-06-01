@@ -27,7 +27,7 @@ export default function DatingAnswer (){
                             <div className="bg-white p-5 pb-12 flex flex-col items-center rounded-[32px] md:w-[476px] w-full">
                                 <p className={"text-[#A6A5A5] text-base"}>you are a</p>
                                 <p className={"text-[#010101] my-3 font-[Recoleta-Bold] text-3xl"}>{daterType?.name}</p>
-                                <p className={"text-[#646363] mt-1 text-base"}>{daterType?.description}</p>
+                                <p className={"text-[#646363] font-medium text-base"}>{daterType?.description}</p>
                             </div>
 
                         </div>
