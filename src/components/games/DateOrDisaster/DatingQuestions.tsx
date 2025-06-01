@@ -28,7 +28,7 @@ export default function DatingQuestions(){
     const dispatch = useDispatch<AppDispatch>();
 
     function updateProgress(){
-        setProgress(progress + 12.5)
+        setProgress(progress + 11.11)
     }
     const [currentPage, setCurrentPage] = useState(0);
     const currentQuestions2 = questionsToMap.slice(currentPage, currentPage+1);
@@ -49,8 +49,13 @@ export default function DatingQuestions(){
         navigate("/date-or-disaster")
     }
     function goToNextQuestion(){
-        if(Object.keys(selectedOptions).length===0){
-            setIsNotSelected((prevState)=>!prevState)
+        console.log("Your selected object before:",selectedOptions)
+        // if(Object.keys(selectedOptions).length===0){
+        //     setIsNotSelected((prevState)=>!prevState)
+        //     return;
+        // }
+        if (selectedOptions[currentPage]===undefined) {
+            setIsNotSelected(prev => !prev);
             return;
         }
         else if (questionCount < 8){
@@ -72,16 +77,16 @@ export default function DatingQuestions(){
     }
 
 
-    function optionClicked(questionIndex: number, optionIndex: number){
+    function optionClicked(currentPage: number, optionIndex: number){
         const clickSound = new Audio ('/select-sound-121244.mp3')
         clickSound.play()
         setSelectedOptions((prev=>({
             ...prev,
                [currentPage]:optionIndex
         })))
-        console.log("Question Index",questionIndex)
-        console.log("Option Index",optionIndex)
         console.log("Selected options",selectedOptions)
+        // console.log("Question Index",questionIndex)
+        console.log("Option Index",optionIndex)
     }
 
 
@@ -97,8 +102,8 @@ export default function DatingQuestions(){
                             {"0" + questionCount} of 08
                         </div>
                         <Progress style={{marginTop:"16px", marginBottom:"16px"}} value={progress} className="h-[21px]"/>
-                        <div className="bg-[#EBEBEB4D]  md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
-                            <div className="bg-white px-5 py-10 md:max-w-[476px]  rounded-[32px]">
+                        <div className="bg-[#EBEBEB4D] w-[350px] md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
+                            <div className="bg-white px-5 py-5 md:max-w-[476px]  rounded-[32px]">
                                 {currentQuestions2?.map((item:Question,questionIndex)=>{
                                     console.log(currentQuestions2)
                                     return(
@@ -110,7 +115,7 @@ export default function DatingQuestions(){
                                                 {item.options.map((item, optionIndex)=>{
                                                     const isSelected =  selectedOptions[currentPage] === optionIndex;
                                                     // console.log(optionIndex)
-                                                    console.log("Selected options is:",selectedOptions[currentPage])
+                                                    // console.log("Selected options is:",selectedOptions[currentPage])
                                                     return(
                                                         <a key={optionIndex} onClick={()=>optionClicked(currentPage, optionIndex)} className={`${isSelected?"border-[#11A401] flex text-[#11A401]":"border-[#F1F1F1]"} flex gap-1 rounded-[12px] p-5 border-2`}>
                                                             <div>{String.fromCharCode(97 + optionIndex)}</div>

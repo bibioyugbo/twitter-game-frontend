@@ -19,7 +19,6 @@ export default function DateOrDisasterLandingPage(){
         //     .catch(err => {
         //         console.error("Error fetching questions:", err);
         //     });
-
             dispatch(fetchQuestions());
         navigate("/dating-questions")
     }
