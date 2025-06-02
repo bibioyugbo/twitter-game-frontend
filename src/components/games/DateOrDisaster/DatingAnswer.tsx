@@ -4,59 +4,90 @@ import importImg from "../../../assets/images/import.svg"
 import {useSelector} from "react-redux";
 import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import domtoimage from 'dom-to-image-more';
+
+
 
 
 export default function DatingAnswer (){
-
+    const [imageUrl, setImageUrl] = useState("")
     const daterType = useSelector(dataType)
     const loading = useSelector(dataTypeLoading);
-    const downloadResult = async (sectionId:string) => {
+    const downloadResult = async (sectionId: string) => {
+        const node = document.getElementById(sectionId);
+        if (!node) {
+            console.error(`Element with ID "${sectionId}" not found`);
+            return;
+        }
+
         try {
-            const section = document.getElementById(sectionId);
-            if (!section) {
-                console.error(`Element with ID "${sectionId}" not found`);
-                return;
-            }
-
-            console.log('Found element:', section); // Debug log
-            const html2canvas = (await import('html2canvas')).default;
-
-
-            const canvas = await html2canvas(section, {
-                backgroundColor: '#ffffff', // Try with white background instead of null
-                scale: 1, // Reduce scale to see if that helps
-                useCORS: true,
-                allowTaint: true,
-                logging: true, //
-                ignoreElements: (element) => {
-                    // Skip elements with oklch colors
-                    const computedStyle = window.getComputedStyle(element);
-                    return computedStyle.backgroundColor.includes('oklch') ||
-                        computedStyle.color.includes('oklch');
-                }
-            });
-
-            canvas.toBlob((blob:Blob | null) => {
-                if (!blob) {
-                    console.error('Failed to create blob');
-                    return;
-                }
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'section.png';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            });
+            const blob = await domtoimage.toBlob(node);
+            const link = document.createElement('a');
+            setImageUrl(URL.createObjectURL(blob))
+            link.href = URL.createObjectURL(blob);
+            link.download = 'date-or-disaster.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
         } catch (error) {
             console.error('Error downloading image:', error);
         }
     };
+    // const downloadResult = async (sectionId:string) => {
+    //     try {
+    //         const section = document.getElementById(sectionId);
+    //         if (!section) {
+    //             console.error(`Element with ID "${sectionId}" not found`);
+    //             return;
+    //         }
+    //
+    //         console.log('Found element:', section);
+    //         console.log('Is in DOM:', document.contains(section));
+    //
+    //         // const html2canvas = (await import('html2canvas')).default;
+    //
+    //         await document.fonts.ready;
+    //         await new Promise(resolve => setTimeout(resolve, 100));
+    //
+    //         const canvas = await html2canvas(section, {
+    //             logging: true,
+    //             useCORS: true,
+    //             // backgroundColor: '#ffffff', // Try with white background instead of null
+    //             // scale: 1, // Reduce scale to see if that helps
+    //             // useCORS: true,
+    //             // allowTaint: true,
+    //             // logging: true, //
+    //             ignoreElements: (element) => {
+    //                 // Skip elements with oklch colors
+    //                 const computedStyle = window.getComputedStyle(element);
+    //                 return computedStyle.backgroundColor.includes('oklch') ||
+    //                     computedStyle.color.includes('oklch');
+    //             }
+    //         });
+    //         console.log("This is your section after", section)
+    //         console.log("This is your canvas", canvas)
+    //         canvas.toBlob((blob:Blob | null) => {
+    //             if (!blob) {
+    //                 console.error('Failed to create blob');
+    //                 return;
+    //             }
+    //             const url = URL.createObjectURL(blob);
+    //             const link = document.createElement('a');
+    //             link.href = url;
+    //             link.download = `date-or-disaster.png`;
+    //             document.body.appendChild(link);
+    //             link.click();
+    //             document.body.removeChild(link);
+    //             URL.revokeObjectURL(url);
+    //         });
+    //     } catch (error) {
+    //         console.error('Error downloading image:', error);
+    //     }
+    // };
     const shareToTwitter = () => {
-        const text = `Date or Disaster\nhttps://date-or-disaster.netlify.app/\nI am a ${daterType?.name}! Find out yours!`;
+        const text = `Date or Disaster\nI am a ${daterType?.name}!\nhttps://date-or-disaster.netlify.app/\n${imageUrl}\n Find out yours!`;
         const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank');
     };
@@ -71,12 +102,12 @@ export default function DatingAnswer (){
                 {
                     loading? <Loader showLoader={loading}/>:
                     <div className={"flex gap-4 flex-col w-full items-center"}>
-                        <div id={"result"} className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
-                            <img src={dateIcon} className={"my-3"} width={236} height={119} alt={""}/>
+                        <div id={"result"}  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
+                            <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
                             <div className="bg-white p-5 pb-12 flex flex-col items-center rounded-[32px] md:w-[476px] w-full">
-                                <p className={"text-[#A6A5A5] text-base"}>you are a</p>
-                                <p className={"text-[#010101] my-3 font-[Recoleta-Bold] text-3xl"}>{daterType?.name}</p>
-                                <p className={"text-[#646363] font-medium text-base"}>{daterType?.description}</p>
+                                <p className={"no-border  text-[#A6A5A5] text-base"}>you are a</p>
+                                <p className={"no-border  text-[#010101] my-3 font-[Recoleta-Bold] text-3xl"}>{daterType?.name}</p>
+                                <p className={"no-border text-[#646363] font-medium text-base"}>{daterType?.description}</p>
                             </div>
 
                         </div>
