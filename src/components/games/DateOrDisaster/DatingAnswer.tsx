@@ -4,7 +4,7 @@ import importImg from "../../../assets/images/import.svg"
 import {useSelector} from "react-redux";
 import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 import domtoimage from 'dom-to-image-more';
 import shareImg from "../../../assets/images/share.svg"
 
@@ -13,8 +13,6 @@ import shareImg from "../../../assets/images/share.svg"
 export default function DatingAnswer (){
     const daterType = useSelector(dataType)
     const loading = useSelector(dataTypeLoading);
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const resultRef = useRef<HTMLDivElement>(null)
     const node = resultRef.current;
 
@@ -29,7 +27,7 @@ export default function DatingAnswer (){
         try {
             const blob = await domtoimage.toBlob(node);
             const link = document.createElement('a');
-            setImageUrl(URL.createObjectURL(blob))
+            // setImageUrl(URL.createObjectURL(blob))
             link.href = URL.createObjectURL(blob);
             link.download = 'date-or-disaster.png';
             document.body.appendChild(link);
