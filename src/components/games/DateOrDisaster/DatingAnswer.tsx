@@ -4,18 +4,19 @@ import importImg from "../../../assets/images/import.svg"
 import {useSelector} from "react-redux";
 import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
-import {useEffect, useState} from "react";
+import {useRef, useState} from "react";
 import domtoimage from 'dom-to-image-more';
 import shareImg from "../../../assets/images/share.svg"
 
 
 
 export default function DatingAnswer (){
-    const node = document.getElementById('result');
     const daterType = useSelector(dataType)
     const loading = useSelector(dataTypeLoading);
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const resultRef = useRef<HTMLDivElement>(null)
+    const node = resultRef.current;
 
 
 
@@ -121,17 +122,17 @@ export default function DatingAnswer (){
     // };
 
 
-    useEffect(() => {
-        const node = document.getElementById('result');
-        if (isMobile && node) {
-            domtoimage.toBlob(node).then(blob => {
-                const url = URL.createObjectURL(blob);
-                setImageUrl(url);
-            }).catch(err => {
-                console.error('Image generation failed', err);
-            });
-        }
-    }, [daterType]);
+    // useEffect(() => {
+    //     const node = document.getElementById('result');
+    //     if (isMobile && node) {
+    //         domtoimage.toBlob(node).then(blob => {
+    //             const url = URL.createObjectURL(blob);
+    //             setImageUrl(url);
+    //         }).catch(err => {
+    //             console.error('Image generation failed', err);
+    //         });
+    //     }
+    // }, [daterType]);
 
     return(
         <>
@@ -140,17 +141,8 @@ export default function DatingAnswer (){
                     loading? <Loader showLoader={loading}/>:
                     <div className={"flex gap-4 flex-col w-full items-center"}>
 
-                        {isMobile && imageUrl ?
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={imageUrl}
-                                    alt="Your dater result"
-                                    className="rounded-[40px] max-w-full"
-                                />
-                                <p className="text-sm text-[#646363] mt-2">Tap and hold to save image</p>
-                            </div>
-                            :
-                            <div id={"result"}  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
+
+                            <div ref={resultRef}  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
                                 <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
                                 <div className="bg-white p-5 pb-12 flex flex-col items-center rounded-[32px] md:w-[476px] w-full">
                                     <p className={"no-border  text-[#A6A5A5] text-base"}>you are a</p>
@@ -158,7 +150,6 @@ export default function DatingAnswer (){
                                     <p className={"no-border text-[#646363] font-medium text-base"}>{daterType?.description}</p>
                                 </div>
                             </div>
-                        }
 
                         <div className={"flex gap-2 mt-8"}>
                             {/*<button onClick={shareToTwitter} className={"bg-[#0D0735]  cursor-pointer hover:scale-105 transition-transform flex justify-center items-center rounded-[64px] h-[64px] w-[64px]"}>*/}
@@ -167,21 +158,22 @@ export default function DatingAnswer (){
                             <button onClick={shareWithImage} className={"bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[64px] w-[64px]"}>
                                 <img src={shareImg} height={30} width={30} alt={""}/>
                             </button>
-                            <button onClick={downloadResult} className={"bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
+
+                            <button onClick={downloadResult} className={" hidden md:flex  bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
                                 <img src={importImg} height={30} width={30} alt={""}/>
                             </button>
-                            {isMobile && imageUrl && (
-                                <div className="text-center">
-                                    <img
-                                        src={imageUrl}
-                                        alt="Generated result"
-                                        style={{ maxWidth: '100%', borderRadius: '1rem', marginBottom: '0.5rem' }}
-                                    />
-                                    <p style={{ fontSize: '0.9rem', color: '#555' }}>
-                                        Tap and hold the image to save it
-                                    </p>
-                                </div>
-                            )}
+                            {/*{isMobile && imageUrl && (*/}
+                            {/*    <div className="text-center">*/}
+                            {/*        <img*/}
+                            {/*            src={imageUrl}*/}
+                            {/*            alt="Generated result"*/}
+                            {/*            style={{ maxWidth: '100%', borderRadius: '1rem', marginBottom: '0.5rem' }}*/}
+                            {/*        />*/}
+                            {/*        <p style={{ fontSize: '0.9rem', color: '#555' }}>*/}
+                            {/*            Tap and hold the image to save it*/}
+                            {/*        </p>*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                         </div>
                     </div>
                 }
