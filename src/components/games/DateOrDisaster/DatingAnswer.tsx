@@ -6,6 +6,7 @@ import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
 import {useRef} from "react";
 import domtoimage from 'dom-to-image-more';
+// import domtoimage from 'dom-to-image-more';
 import shareImg from "../../../assets/images/share.svg"
 
 
@@ -46,20 +47,22 @@ export default function DatingAnswer (){
         }
 
         try {
+            await document.fonts.ready;
+            const scale = 3; // or 3 for ultra HD
+            const style = {
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+                width: `${node.offsetWidth}px`,
+                height: `${node.offsetHeight}px`,
+            };
             node.scrollIntoView({ behavior: "auto", block: "center" });
             await new Promise(resolve => requestAnimationFrame(resolve));
             await new Promise(resolve => setTimeout(resolve, 300));
 
-            const rect = node.getBoundingClientRect();
             const blob = await domtoimage.toBlob(node, {
-                width: rect.width,
-                height: rect.height,
-                style: {
-                    transform: 'scale(1)',
-                    transformOrigin: 'top left',
-                    width: `${rect.width}px`,
-                    height: `${rect.height}px`,
-                }
+                width: node.offsetWidth * scale,
+                height: node.offsetHeight * scale,
+                style,
             });
 
             const file = new File([blob], "result.png", { type: "image/png" });
