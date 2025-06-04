@@ -42,50 +42,161 @@ export default function DatingAnswer (){
     const shareWithImage = async () => {
         const node = resultRef.current;
         if (!node) {
-            console.error(`Element not found`);
+            console.error('Element not found');
             return;
         }
 
         try {
-            await document.fonts.ready;
-            const scale = 3; // or 3 for ultra HD
-            const style = {
-                transform: `scale(${scale})`,
-                transformOrigin: 'top left',
-                width: `${node.offsetWidth}px`,
-                height: `${node.offsetHeight}px`,
-            };
-            node.scrollIntoView({ behavior: "auto", block: "center" });
-            await new Promise(resolve => requestAnimationFrame(resolve));
-            await new Promise(resolve => setTimeout(resolve, 300));
+            // Wait for fonts to load
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
 
-            const blob = await domtoimage.toBlob(node, {
-                width: node.offsetWidth * scale,
-                height: node.offsetHeight * scale,
-                style,
+            // Additional wait for mobile devices
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            // Force layout recalculation
+            node.style.opacity = '0.99';
+            requestAnimationFrame(() => {
+                node.style.opacity = '1';
             });
 
-            const file = new File([blob], "result.png", { type: "image/png" });
+            // Scroll into view and wait
+            node.scrollIntoView({ behavior: "auto", block: "center" });
+            await new Promise(resolve => setTimeout(resolve, 500));
 
+            // Force inline styles for better mobile compatibility
+            const computedStyle = window.getComputedStyle(node);
+            const originalStyles = {
+                fontFamily: node.style.fontFamily,
+                fontSize: node.style.fontSize,
+                fontWeight: node.style.fontWeight
+            };
+
+            // Apply computed styles inline
+            node.style.fontFamily = computedStyle.fontFamily;
+            node.style.fontSize = computedStyle.fontSize;
+            node.style.fontWeight = computedStyle.fontWeight;
+
+            const scale = 2;
+            const options = {
+                width: node.offsetWidth * scale,
+                height: node.offsetHeight * scale,
+                style: {
+                    transform: `scale(${scale})`,
+                    transformOrigin: 'top left',
+                    width: `${node.offsetWidth}px`,
+                    height: `${node.offsetHeight}px`,
+                },
+                quality: 1.0,
+                cacheBust: true
+            };
+
+            const blob = await domtoimage.toBlob(node, options);
+
+            // Restore original styles
+            node.style.fontFamily = originalStyles.fontFamily || '';
+            node.style.fontSize = originalStyles.fontSize || '';
+            node.style.fontWeight = originalStyles.fontWeight || '';
+
+            if (!blob) {
+                throw new Error('Failed to generate image');
+            }
+
+            const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
+
+            // Try sharing with file
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     title: "Date or Disaster",
-                    text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
-                    files: [file],
-                    url: 'https://date-or-disaster.netlify.app',
+                    text: `I am a ${daterType?.name || 'mystery type'}!\nFind out yours! 👉`,
+                    files: [file]
                 });
+            } else if (navigator.share) {
+                // Fallback to text sharing
+                await navigator.share({
+                    title: "Date or Disaster",
+                    text: `I am a ${daterType?.name || 'mystery type'}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`
+                });
+            } else {
+                // Manual download
+                const url = URL.createObjectURL(file);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'date-or-disaster.png';
+                a.click();
+                URL.revokeObjectURL(url);
             }
-            // else {
-            //     // fallback
-            //     setImageUrl(URL.createObjectURL(file));
-            //     setShowModal(true);
-            // }
 
         } catch (err) {
-            console.error("Sharing failed", err);
-            alert("Sharing is not supported or failed.");
+            console.error("Sharing failed:", err);
+
+            // Last resort: simple text sharing
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: "Date or Disaster",
+                        text: `I am a ${daterType?.name || 'mystery type'}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`
+                    });
+                } else {
+                    alert("Sharing not supported. Screenshot this page to share!");
+                }
+            } catch (shareErr) {
+                console.error("Text sharing also failed:", shareErr);
+                alert("Please screenshot this page to share your result!");
+            }
         }
     };
+    // const shareWithImage = async () => {
+    //     const node = resultRef.current;
+    //     if (!node) {
+    //         console.error(`Element not found`);
+    //         return;
+    //     }
+    //
+    //     try {
+    //         await document.fonts.ready;
+    //         const scale = 3; // or 3 for ultra HD
+    //         const style = {
+    //             transform: `scale(${scale})`,
+    //             transformOrigin: 'top left',
+    //             width: `${node.offsetWidth}px`,
+    //             height: `${node.offsetHeight}px`,
+    //         };
+    //         node.scrollIntoView({ behavior: "auto", block: "center" });
+    //         await new Promise(resolve => requestAnimationFrame(resolve));
+    //         await new Promise(resolve => setTimeout(resolve, 300));
+    //
+    //         const blob = await domtoimage.toBlob(node, {
+    //             width: node.offsetWidth * scale,
+    //             height: node.offsetHeight * scale,
+    //             style,
+    //         });
+    //
+    //         const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
+    //
+    //         if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    //             await navigator.share({
+    //                 title: "Date or Disaster",
+    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
+    //                 files: [file],
+    //                 url: 'https://date-or-disaster.netlify.app',
+    //             });
+    //         }
+    //         // else {
+    //         //     // fallback
+    //         //     setImageUrl(URL.createObjectURL(file));
+    //         //     setShowModal(true);
+    //         // }
+    //
+    //     } catch (err) {
+    //         console.error("Sharing failed", err);
+    //         alert("Sharing is not supported or failed.");
+    //     }
+    // };
 
     // const downloadResult = async (sectionId:string) => {
     //     try {
