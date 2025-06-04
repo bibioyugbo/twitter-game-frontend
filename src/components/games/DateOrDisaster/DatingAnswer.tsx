@@ -169,6 +169,29 @@ export default function DatingAnswer (){
                             <button onClick={downloadResult} className={" hidden md:flex  bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
                                 <img src={importImg} height={30} width={30} alt={""}/>
                             </button>
+                            {showModal && imageUrl &&
+                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
+                                <div className="relative max-w-md w-full p-4">
+                                <button
+                                onClick={() => {
+                                setShowModal(false);
+                                setImageUrl(null);
+                            }}
+                                className="absolute top-2 right-2 text-white text-2xl"
+                                >
+                                &times;
+                                </button>
+                                <img
+                                src={imageUrl}
+                            alt="Your result"
+                            className="w-full rounded-lg"
+                        />
+                        <p className="mt-2 text-center text-white text-sm">
+                            Tap and hold the image to save or share
+                        </p>
+                    </div>
+                    </div>
+                    }
                             {/*{isMobile && imageUrl && (*/}
                             {/*    <div className="text-center">*/}
                             {/*        <img*/}
