@@ -39,6 +39,119 @@ export default function DatingAnswer (){
             console.error('Error downloading image:', error);
         }
     };
+    // const shareWithImage = async () => {
+    //     const node = resultRef.current;
+    //     if (!node) {
+    //         console.error(`Element not found`);
+    //         return;
+    //     }
+    //
+    //     // First, let's test if sharing works at all
+    //     console.log('Testing navigator.share capability...');
+    //     console.log('navigator.share exists:', !!navigator.share);
+    //     console.log('navigator.canShare exists:', !!navigator.canShare);
+    //
+    //     // Test basic text sharing first
+    //     if (navigator.share) {
+    //         try {
+    //             console.log('Attempting basic text share...');
+    //             await navigator.share({
+    //                 title: "Date or Disaster",
+    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
+    //             });
+    //             console.log('Basic text sharing worked!');
+    //             return; // Remove this return after testing
+    //         } catch (textErr) {
+    //             console.error('Basic text sharing failed:', textErr);
+    //         }
+    //     }
+    //
+    //     // Now try with image generation
+    //     try {
+    //         console.log('Starting image generation process...');
+    //         await document.fonts.ready;
+    //         console.log('Fonts ready');
+    //
+    //         const scale = 2; // Reduced scale for better mobile performance
+    //         const style = {
+    //             transform: `scale(${scale})`,
+    //             transformOrigin: 'top left',
+    //             width: `${node.offsetWidth}px`,
+    //             height: `${node.offsetHeight}px`,
+    //         };
+    //
+    //         node.scrollIntoView({ behavior: "auto", block: "center" });
+    //         await new Promise(resolve => requestAnimationFrame(resolve));
+    //         await new Promise(resolve => setTimeout(resolve, 500));
+    //
+    //         console.log('About to generate blob...');
+    //         const blob = await domtoimage.toBlob(node, {
+    //             width: node.offsetWidth * scale,
+    //             height: node.offsetHeight * scale,
+    //             style,
+    //             quality: 0.9, // Slightly lower quality for better compatibility
+    //         });
+    //
+    //         console.log('Blob generated:', !!blob);
+    //         if (!blob) {
+    //             throw new Error('Blob generation returned null');
+    //         }
+    //
+    //         const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
+    //         console.log('File created, size:', file.size);
+    //
+    //         // Test file sharing capability
+    //         if (navigator.canShare) {
+    //             const canShareFile = navigator.canShare({ files: [file] });
+    //             console.log('Can share files:', canShareFile);
+    //         }
+    //
+    //         if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    //             console.log('Attempting to share with file...');
+    //             await navigator.share({
+    //                 title: "Date or Disaster",
+    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
+    //                 files: [file],
+    //                 url: 'https://date-or-disaster.netlify.app',
+    //             });
+    //             console.log('File sharing successful!');
+    //         } else if (navigator.share) {
+    //             console.log('File sharing not supported, trying text only...');
+    //             await navigator.share({
+    //                 title: "Date or Disaster",
+    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
+    //             });
+    //             console.log('Text sharing successful!');
+    //         } else {
+    //             console.log('No sharing support, using fallback...');
+    //             // Your modal fallback
+    //             // const imageUrl = URL.createObjectURL(file);
+    //             // setImageUrl(imageUrl);
+    //             // setShowModal(true);
+    //         }
+    //
+    //         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    //     } catch (err) {
+    //         console.error('Error details:');
+    //
+    //         // Try text sharing as last resort
+    //         if (navigator.share) {
+    //             try {
+    //                 console.log('Attempting fallback text sharing...');
+    //                 await navigator.share({
+    //                     title: "Date or Disaster",
+    //                     text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
+    //                 });
+    //                 console.log('Fallback text sharing worked!');
+    //             } catch (shareErr) {
+    //                 console.error('Fallback sharing also failed:', shareErr);
+    //                 alert(`Sharing failed. Error:`);
+    //             }
+    //         } else {
+    //             alert(`Sharing not supported. Error: `);
+    //         }
+    //     }
+    // };
     const shareWithImage = async () => {
         const node = resultRef.current;
         if (!node) {
@@ -46,158 +159,46 @@ export default function DatingAnswer (){
             return;
         }
 
-        // First, let's test if sharing works at all
-        console.log('Testing navigator.share capability...');
-        console.log('navigator.share exists:', !!navigator.share);
-        console.log('navigator.canShare exists:', !!navigator.canShare);
-
-        // Test basic text sharing first
-        if (navigator.share) {
-            try {
-                console.log('Attempting basic text share...');
-                await navigator.share({
-                    title: "Date or Disaster",
-                    text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
-                });
-                console.log('Basic text sharing worked!');
-                return; // Remove this return after testing
-            } catch (textErr) {
-                console.error('Basic text sharing failed:', textErr);
-            }
-        }
-
-        // Now try with image generation
         try {
-            console.log('Starting image generation process...');
             await document.fonts.ready;
-            console.log('Fonts ready');
-
-            const scale = 2; // Reduced scale for better mobile performance
+            const scale = 3; // or 3 for ultra HD
             const style = {
                 transform: `scale(${scale})`,
                 transformOrigin: 'top left',
                 width: `${node.offsetWidth}px`,
                 height: `${node.offsetHeight}px`,
             };
-
             node.scrollIntoView({ behavior: "auto", block: "center" });
             await new Promise(resolve => requestAnimationFrame(resolve));
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 300));
 
-            console.log('About to generate blob...');
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
                 height: node.offsetHeight * scale,
                 style,
-                quality: 0.9, // Slightly lower quality for better compatibility
             });
 
-            console.log('Blob generated:', !!blob);
-            if (!blob) {
-                throw new Error('Blob generation returned null');
-            }
-
             const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
-            console.log('File created, size:', file.size);
-
-            // Test file sharing capability
-            if (navigator.canShare) {
-                const canShareFile = navigator.canShare({ files: [file] });
-                console.log('Can share files:', canShareFile);
-            }
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                console.log('Attempting to share with file...');
                 await navigator.share({
                     title: "Date or Disaster",
                     text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
                     files: [file],
                     url: 'https://date-or-disaster.netlify.app',
                 });
-                console.log('File sharing successful!');
-            } else if (navigator.share) {
-                console.log('File sharing not supported, trying text only...');
-                await navigator.share({
-                    title: "Date or Disaster",
-                    text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
-                });
-                console.log('Text sharing successful!');
-            } else {
-                console.log('No sharing support, using fallback...');
-                // Your modal fallback
-                // const imageUrl = URL.createObjectURL(file);
-                // setImageUrl(imageUrl);
-                // setShowModal(true);
             }
+            // else {
+            //     // fallback
+            //     setImageUrl(URL.createObjectURL(file));
+            //     setShowModal(true);
+            // }
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
-            console.error('Error details:');
-
-            // Try text sharing as last resort
-            if (navigator.share) {
-                try {
-                    console.log('Attempting fallback text sharing...');
-                    await navigator.share({
-                        title: "Date or Disaster",
-                        text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
-                    });
-                    console.log('Fallback text sharing worked!');
-                } catch (shareErr) {
-                    console.error('Fallback sharing also failed:', shareErr);
-                    alert(`Sharing failed. Error:`);
-                }
-            } else {
-                alert(`Sharing not supported. Error: `);
-            }
+            console.error("Sharing failed", err);
+            alert("Sharing is not supported or failed.");
         }
-    };    // const shareWithImage = async () => {
-    //     const node = resultRef.current;
-    //     if (!node) {
-    //         console.error(`Element not found`);
-    //         return;
-    //     }
-    //
-    //     try {
-    //         await document.fonts.ready;
-    //         const scale = 3; // or 3 for ultra HD
-    //         const style = {
-    //             transform: `scale(${scale})`,
-    //             transformOrigin: 'top left',
-    //             width: `${node.offsetWidth}px`,
-    //             height: `${node.offsetHeight}px`,
-    //         };
-    //         node.scrollIntoView({ behavior: "auto", block: "center" });
-    //         await new Promise(resolve => requestAnimationFrame(resolve));
-    //         await new Promise(resolve => setTimeout(resolve, 300));
-    //
-    //         const blob = await domtoimage.toBlob(node, {
-    //             width: node.offsetWidth * scale,
-    //             height: node.offsetHeight * scale,
-    //             style,
-    //         });
-    //
-    //         const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
-    //
-    //         if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    //             await navigator.share({
-    //                 title: "Date or Disaster",
-    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
-    //                 files: [file],
-    //                 url: 'https://date-or-disaster.netlify.app',
-    //             });
-    //         }
-    //         // else {
-    //         //     // fallback
-    //         //     setImageUrl(URL.createObjectURL(file));
-    //         //     setShowModal(true);
-    //         // }
-    //
-    //     } catch (err) {
-    //         console.error("Sharing failed", err);
-    //         alert("Sharing is not supported or failed.");
-    //     }
-    // };
+    };
 
     // const downloadResult = async (sectionId:string) => {
     //     try {
