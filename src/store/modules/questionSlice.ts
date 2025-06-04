@@ -1,5 +1,9 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {RootState} from "@/store";
+const localQuestions = localStorage.getItem("questions");
+const parsedQuestions = localQuestions ? JSON.parse(localQuestions) : [];
+const persistedDaterType = localStorage.getItem("daterType");
+
 
 export interface Question{
     question: string,
@@ -29,7 +33,7 @@ interface QuestionsState {
     error: string | null;
 }
 const initialState: QuestionsState = {
-    data: [],
+    data: parsedQuestions,
     loading: false,
     error: null,
 
@@ -44,20 +48,24 @@ interface DaterTypeState {
 const daterTypeInitialState: DaterTypeState = {
     loading: false,
     error: null,
-    daterType: {} as DaterType,
+    daterType: persistedDaterType? JSON.parse(persistedDaterType) : null,
 };
 
 
 export const fetchQuestions = createAsyncThunk(
     'questions/fetchQuestions',
-    async ()=>{
+    async () => {
         const response = await fetch('https://twitter-game-backend.onrender.com/questions');
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error('Failed to fetch questions');
         }
-        return (await response.json()) as Question[];
+
+        const data = await response.json(); // parse JSON
+        localStorage.setItem("questions", JSON.stringify(data)); // persist
+        return data as Question[];
     }
-)
+);
+
 export const getDaterType = createAsyncThunk(
     'daterType/getDaterType',
     async (formData: DaterTypeRequest, thunkAPI) => {
@@ -74,7 +82,12 @@ export const getDaterType = createAsyncThunk(
             if (!response.ok) {
                 throw new Error('Failed to get dater type');
             }
-            return await response.json();
+            const data = await response.json();
+
+            // Persist to localStorage
+            localStorage.setItem("daterType", JSON.stringify(data));
+
+            return data;
         } catch (error: unknown) {
             if (error instanceof Error) {
                 return thunkAPI.rejectWithValue(error.message);
