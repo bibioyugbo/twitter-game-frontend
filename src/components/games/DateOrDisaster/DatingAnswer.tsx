@@ -45,10 +45,17 @@ export default function DatingAnswer (){
             return;
         }
         try {
-            const blob = await domtoimage.toBlob(node);
+            await new Promise(resolve => requestAnimationFrame(resolve));
+            const blob = await domtoimage.toBlob(node, {
+                style: {
+                    transform: 'scale(1)',
+                    transformOrigin: 'top left',
+                }
+            });
             const file = new File([blob], "result.png", { type: "image/png" });
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
                 await navigator.share({
                     title: "Date or Disaster",
                     text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
@@ -175,29 +182,6 @@ export default function DatingAnswer (){
                             {/*    </div>*/}
                             {/*)}*/}
                         </div>
-                        {showModal && imageUrl && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-                                <div className="relative max-w-md w-full p-4">
-                                    <button
-                                        onClick={() => {
-                                            setShowModal(false);
-                                            setImageUrl(null);
-                                        }}
-                                        className="absolute top-2 right-2 text-white text-2xl"
-                                    >
-                                        &times;
-                                    </button>
-                                    <img
-                                        src={imageUrl}
-                                        alt="Your result"
-                                        className="w-full rounded-lg"
-                                    />
-                                    <p className="mt-2 text-center text-white text-sm">
-                                        Tap and hold the image to save or share
-                                    </p>
-                                </div>
-                            </div>
-                        )}
                     </div>
 
                 }
