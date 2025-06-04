@@ -4,7 +4,7 @@ import importImg from "../../../assets/images/import.svg"
 import {useSelector} from "react-redux";
 import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 import domtoimage from 'dom-to-image-more';
 import shareImg from "../../../assets/images/share.svg"
 
@@ -14,8 +14,8 @@ export default function DatingAnswer (){
     const daterType = useSelector(dataType)
     const loading = useSelector(dataTypeLoading);
     const resultRef = useRef<HTMLDivElement>(null)
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const [showModal, setShowModal] = useState(false);
+    // const [imageUrl, setImageUrl] = useState<string | null>(null);
+    // const [showModal, setShowModal] = useState(false);
 
     const downloadResult = async () => {
         const node = resultRef.current;
@@ -41,36 +41,46 @@ export default function DatingAnswer (){
     const shareWithImage = async () => {
         const node = resultRef.current;
         if (!node) {
-            console.error(`Element with ID not found`);
+            console.error(`Element not found`);
             return;
         }
+
         try {
+            node.scrollIntoView({ behavior: "auto", block: "center" });
             await new Promise(resolve => requestAnimationFrame(resolve));
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            const rect = node.getBoundingClientRect();
             const blob = await domtoimage.toBlob(node, {
+                width: rect.width,
+                height: rect.height,
                 style: {
                     transform: 'scale(1)',
                     transformOrigin: 'top left',
+                    width: `${rect.width}px`,
+                    height: `${rect.height}px`,
                 }
             });
+
             const file = new File([blob], "result.png", { type: "image/png" });
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-
                 await navigator.share({
                     title: "Date or Disaster",
                     text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
                     files: [file],
                     url: 'https://date-or-disaster.netlify.app',
                 });
-            } else {
-                // Fallback for mobile
-                setImageUrl(URL.createObjectURL(file));
-                setShowModal(true);
-
             }
+            // else {
+            //     // fallback
+            //     setImageUrl(URL.createObjectURL(file));
+            //     setShowModal(true);
+            // }
+
         } catch (err) {
             console.error("Sharing failed", err);
-            alert("Sharing is not supported on this device.");
+            alert("Sharing is not supported or failed.");
         }
     };
 
@@ -169,29 +179,29 @@ export default function DatingAnswer (){
                             <button onClick={downloadResult} className={" hidden md:flex  bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
                                 <img src={importImg} height={30} width={30} alt={""}/>
                             </button>
-                            {showModal && imageUrl &&
-                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
-                                <div className="relative max-w-md w-full p-4">
-                                <button
-                                onClick={() => {
-                                setShowModal(false);
-                                setImageUrl(null);
-                            }}
-                                className="absolute top-2 right-2 text-white text-2xl"
-                                >
-                                &times;
-                                </button>
-                                <img
-                                src={imageUrl}
-                            alt="Your result"
-                            className="w-full rounded-lg"
-                        />
-                        <p className="mt-2 text-center text-white text-sm">
-                            Tap and hold the image to save or share
-                        </p>
-                    </div>
-                    </div>
-                    }
+                    {/*        {showModal && imageUrl &&*/}
+                    {/*            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">*/}
+                    {/*            <div className="relative max-w-md w-full p-4">*/}
+                    {/*            <button*/}
+                    {/*            onClick={() => {*/}
+                    {/*            setShowModal(false);*/}
+                    {/*            setImageUrl(null);*/}
+                    {/*        }}*/}
+                    {/*            className="absolute top-2 right-2 text-white text-2xl"*/}
+                    {/*            >*/}
+                    {/*            &times;*/}
+                    {/*            </button>*/}
+                    {/*            <img*/}
+                    {/*            src={imageUrl}*/}
+                    {/*        alt="Your result"*/}
+                    {/*        className="w-full rounded-lg"*/}
+                    {/*    />*/}
+                    {/*    <p className="mt-2 text-center text-white text-sm">*/}
+                    {/*        Tap and hold the image to save or share*/}
+                    {/*    </p>*/}
+                    {/*</div>*/}
+                    {/*</div>*/}
+                    {/*}*/}
                             {/*{isMobile && imageUrl && (*/}
                             {/*    <div className="text-center">*/}
                             {/*        <img*/}
