@@ -42,111 +42,97 @@ export default function DatingAnswer (){
     const shareWithImage = async () => {
         const node = resultRef.current;
         if (!node) {
-            console.error('Element not found');
+            console.error(`Element not found`);
             return;
         }
 
         try {
-            // Wait for fonts to load
-            if (document.fonts && document.fonts.ready) {
-                await document.fonts.ready;
-            }
+            // Enhanced font loading for mobile
+            await document.fonts.ready;
 
-            // Additional wait for mobile devices
+            // Additional mobile-specific font loading
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             if (isMobile) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Force font loading by creating invisible elements
+                const testElement = document.createElement('div');
+                testElement.style.visibility = 'hidden';
+                testElement.style.position = 'absolute';
+                testElement.style.top = '-9999px';
+                testElement.innerHTML = `
+                <div style="font-family: ${getComputedStyle(node).fontFamily}; font-weight: bold;">Test</div>
+                <div>🧊❤️🐍</div>
+            `;
+                document.body.appendChild(testElement);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                document.body.removeChild(testElement);
             }
 
-            // Force layout recalculation
-            node.style.opacity = '0.99';
-            requestAnimationFrame(() => {
-                node.style.opacity = '1';
-            });
-
-            // Scroll into view and wait
-            node.scrollIntoView({ behavior: "auto", block: "center" });
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            // Force inline styles for better mobile compatibility
-            const computedStyle = window.getComputedStyle(node);
-            const originalStyles = {
-                fontFamily: node.style.fontFamily,
-                fontSize: node.style.fontSize,
-                fontWeight: node.style.fontWeight
+            const scale = 3;
+            const style = {
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+                width: `${node.offsetWidth}px`,
+                height: `${node.offsetHeight}px`,
             };
 
-            // Apply computed styles inline
-            node.style.fontFamily = computedStyle.fontFamily;
-            node.style.fontSize = computedStyle.fontSize;
-            node.style.fontWeight = computedStyle.fontWeight;
+            node.scrollIntoView({ behavior: "auto", block: "center" });
+            await new Promise(resolve => requestAnimationFrame(resolve));
+            await new Promise(resolve => setTimeout(resolve, isMobile ? 800 : 300));
 
-            const scale = 2;
-            const options = {
+            // Enhanced options for mobile
+            const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
                 height: node.offsetHeight * scale,
-                style: {
-                    transform: `scale(${scale})`,
-                    transformOrigin: 'top left',
-                    width: `${node.offsetWidth}px`,
-                    height: `${node.offsetHeight}px`,
-                },
+                style,
                 quality: 1.0,
-                cacheBust: true
-            };
-
-            const blob = await domtoimage.toBlob(node, options);
-
-            // Restore original styles
-            node.style.fontFamily = originalStyles.fontFamily || '';
-            node.style.fontSize = originalStyles.fontSize || '';
-            node.style.fontWeight = originalStyles.fontWeight || '';
+                cacheBust: true,
+                // Force inline styles for mobile compatibility
+                filter: (domNode: { tagName: string; }) => {
+                    // Skip problematic nodes that might cause rendering issues
+                    if (domNode.tagName === 'SCRIPT') return false;
+                    return true;
+                }
+            });
 
             if (!blob) {
-                throw new Error('Failed to generate image');
+                throw new Error('Failed to generate image blob');
             }
 
             const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
 
-            // Try sharing with file
+            // Always try to share - this will open the navigator
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     title: "Date or Disaster",
-                    text: `I am a ${daterType?.name || 'mystery type'}!\nFind out yours! 👉`,
-                    files: [file]
+                    text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
+                    files: [file],
+                    url: 'https://date-or-disaster.netlify.app',
                 });
             } else if (navigator.share) {
-                // Fallback to text sharing
+                // iOS sometimes doesn't support file sharing but supports text
+                // This will still open the share sheet
                 await navigator.share({
                     title: "Date or Disaster",
-                    text: `I am a ${daterType?.name || 'mystery type'}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`
+                    text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
                 });
-            } else {
-                // Manual download
-                const url = URL.createObjectURL(file);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'date-or-disaster.png';
-                a.click();
-                URL.revokeObjectURL(url);
             }
 
         } catch (err) {
-            console.error("Sharing failed:", err);
+            console.error("Sharing failed", err);
 
-            // Last resort: simple text sharing
+            // If sharing fails, try text-only sharing to still open navigator
             try {
                 if (navigator.share) {
                     await navigator.share({
                         title: "Date or Disaster",
-                        text: `I am a ${daterType?.name || 'mystery type'}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`
+                        text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
                     });
                 } else {
-                    alert("Sharing not supported. Screenshot this page to share!");
+                    alert("Sharing is not supported or failed.");
                 }
             } catch (shareErr) {
-                console.error("Text sharing also failed:", shareErr);
-                alert("Please screenshot this page to share your result!");
+                console.error("Even text sharing failed", shareErr);
+                alert("Sharing is not supported or failed.");
             }
         }
     };
