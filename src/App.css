@@ -40,6 +40,20 @@ body{
     /*padding-top: env(safe-area-inset-top)!important;*/
     /*padding-bottom: env(safe-area-inset-bottom)!important;*/
 }
+
+
+/*.app-wrapper{*/
+/*    overflow: hidden;*/
+/*    height: 100dvh;*/
+/*    padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 10px);*/
+/*}*/
+
+/*@media (max-width: 700px) {*/
+/*    .app-wrapper {*/
+/*        padding: env(safe-area-inset-top, 15px) env(safe-area-inset-right, 8px) env(safe-area-inset-bottom, 15px) env(safe-area-inset-left, 8px);*/
+/*    }*/
+/*}*/
+
 .no-border {
     border: none !important;
 }
@@ -85,7 +99,7 @@ body{
     background-position: center;
     /*background-blend-mode: overlay;*/
     background-repeat: no-repeat;
-    height: 100vh;
+    height: 100dvh;
 }
 /*---break---*/
 @theme inline {
