@@ -131,7 +131,7 @@ export default function DatingQuestions(){
                                 })}
                             </div>
                         </div>
-                        <DefaultButton shake={isNotSelected} customClass={`w-full max-w-[232px] md:max-w-[444px] bottom-[calc(20px+env(safe-area-inset-bottom))]`}  style={{marginTop:"36px"}} onClick={()=>goToNextQuestion()} text={questionCount===8?"What Dater are you?":"Continue"} />
+                        <DefaultButton shake={isNotSelected} customClass={`w-full max-w-[232px] md:max-w-[444px] bottom-[calc(20px+env(safe-area-inset-bottom))]`}  style={{ marginBottom:"10px" ,height:"55px", padding:0}} onClick={()=>goToNextQuestion()} text={questionCount===8?"What Dater are you?":"Continue"} />
                     </div>
                 }
             </DateOrDisasterWrapper>
