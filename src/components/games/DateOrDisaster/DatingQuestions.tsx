@@ -98,7 +98,7 @@ export default function DatingQuestions(){
             <DateOrDisasterWrapper>
                 {loading?
                     <Loader showLoader={loading}/>:
-                    <div className=" items-center justify-center flex flex-col gap-4">
+                    <div className="h-dvh  items-center justify-center flex flex-col gap-4">
                         <div className="text-white font-[Satoshi-Bold] text-base md:text-xl">
                             {"0" + questionCount} of 08
                         </div>
