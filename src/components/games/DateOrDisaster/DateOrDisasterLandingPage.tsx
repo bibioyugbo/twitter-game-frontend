@@ -33,7 +33,6 @@ export default function DateOrDisasterLandingPage(){
                     </p>
                     <DefaultButton style={{marginTop:"40px"}} customClass={"w-full max-w-[232px] md:max-w-[444px]"} onClick={()=>startQuiz()} text={"Start Quiz"}/>
                 </div>
-                <footer style={{ marginTop: "auto" }} className={"text-white"}>Made with ❤️ by <span className={"underline"}>Adaeze</span> and <span className={"underline"}>Bibi</span></footer>
             </DateOrDisasterWrapper>
         </>
     )

@@ -20,6 +20,7 @@ export default function DatingQuestions(){
     const [progress, setProgress] = useState(12.5)
     const [isNotSelected, setIsNotSelected] = useState(false)
     const loading = useSelector(selectQuestionsLoading);
+    // const loading = true;
     const [questionCount, setQuestionCount] = useState(1)
     const navigate = useNavigate()
     const questions = useSelector(selectQuestions);

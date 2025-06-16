@@ -43,6 +43,9 @@ body{
 .no-border {
     border: none !important;
 }
+.footer-text {
+    white-space: nowrap;
+}
 /*.bottom-fixed{*/
 /*    position: fixed;*/
 /*    bottom: env(safe-area-inset-bottom);*/
