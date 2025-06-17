@@ -13,8 +13,8 @@ export default function DateOrDisasterWrapper({...props}:DateOrDisasterWrapperPr
             {/*<div className={"bg-gradient-to-br h-screen from-yellow-200 via-yellow-400 to-yellow-600"}>*/}
             {/*    {children}*/}
             {/*</div>*/}
-            <div style={props.style} className={'no-border min-h-screen app-wrapper date-or-disaster p-5 flex items-center flex-col justify-center w-full '}>
-                <div className={"no-border flex-1 flex items-center justify-center"}>
+            <div style={props.style} className={'no-border min-h-screen app-wrapper date-or-disaster p-5 flex items-center flex-col  w-full '}>
+                <div className={"no-border flex-1 flex items-center "}>
                     <div className={'no-border'}>
                         {props.children}
                     </div>
