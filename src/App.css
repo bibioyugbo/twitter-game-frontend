@@ -99,7 +99,7 @@ body{
     background-position: center;
     /*background-blend-mode: overlay;*/
     background-repeat: no-repeat;
-    height: 100dvh;
+    /*height: 100dvh;*/
 }
 /*---break---*/
 @theme inline {
