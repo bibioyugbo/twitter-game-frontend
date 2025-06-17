@@ -25,7 +25,7 @@ export default function DateOrDisasterLandingPage(){
     return(
         <>
             <div className={'no-border h-dvh app-wrapper date-or-disaster p-5 flex items-center flex-col  w-full '}>
-                <div className={"flex flex-col flex-1 items-center "}>
+                <div className={"flex flex-col flex-1 items-center justify-center "}>
                     <img src={dateIcon} alt={""}/>
                     <p className={"text-white font-[Satoshi-Bold] md:max-w-[412px] text-base text-center"}> Are you a dream partner or just pure
                         stress? Take this quiz to find out!
