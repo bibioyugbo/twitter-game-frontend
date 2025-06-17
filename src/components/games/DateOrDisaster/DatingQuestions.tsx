@@ -103,7 +103,7 @@ export default function DatingQuestions(){
                             {"0" + questionCount} of 08
                         </div>
                         <Progress style={{marginTop:"5px", marginBottom:"5px"}} value={progress} className="h-[21px]"/>
-                        <div className="bg-[#EBEBEB4D] w-full md:w-full md:max-w-[508px] px-2 py-2 md:px-4 md:py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
+                        <div className="bg-[#EBEBEB4D] w-full md:w-full md:max-w-[508px] px-4 py-4  flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
                             <div className="bg-white px-5 py-5 md:max-w-[476px]  rounded-[32px]">
                                 {currentQuestions2?.map((item:Question,questionIndex)=>{
                                     console.log(currentQuestions2)

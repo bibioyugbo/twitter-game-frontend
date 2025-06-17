@@ -14,7 +14,7 @@ export default function DateOrDisasterWrapper({...props}:DateOrDisasterWrapperPr
             {/*    {children}*/}
             {/*</div>*/}
             <div style={props.style} className={'no-border app-wrapper date-or-disaster p-5 flex items-center flex-col justify-center w-full '}>
-                <div className={"no-border flex-1 flex items-center h-dvh justify-center"}>
+                <div className={"no-border flex-1 flex items-center min-h-screen justify-center"}>
                     <div className={'no-border'}>
                         {props.children}
                     </div>
