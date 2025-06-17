@@ -102,14 +102,14 @@ export default function DatingQuestions(){
                         <div className="text-white font-[Satoshi-Bold] text-base md:text-xl">
                             {"0" + questionCount} of 08
                         </div>
-                        <Progress style={{marginTop:"16px", marginBottom:"16px"}} value={progress} className="h-[21px]"/>
-                        <div className="bg-[#EBEBEB4D] w-full md:w-full md:max-w-[508px] px-4 py-4 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
+                        <Progress style={{marginTop:"5px", marginBottom:"5px"}} value={progress} className="h-[21px]"/>
+                        <div className="bg-[#EBEBEB4D] w-full md:w-full md:max-w-[508px] px-2 py-2 flex items-center justify-center rounded-[40px] border-2 border-[#DEE4FF2E]   ">
                             <div className="bg-white px-5 py-5 md:max-w-[476px]  rounded-[32px]">
                                 {currentQuestions2?.map((item:Question,questionIndex)=>{
                                     console.log(currentQuestions2)
                                     return(
                                         <div key={questionIndex}>
-                                            <div className={"text-[#003A58] font-[Satoshi-Bold] text-base md:text-xl my-4"}>
+                                            <div className={"text-[#003A58] font-[Satoshi-Bold] text-base md:text-xl mt-4"}>
                                                 {item.question}
                                             </div>
                                             <div className={"text-[#646363] font-[Satoshi-Bold] cursor-pointer mt-9 flex flex-col gap-2 text-sm md:text-base "}>
