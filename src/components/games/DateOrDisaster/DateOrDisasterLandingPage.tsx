@@ -1,4 +1,3 @@
-import DateOrDisasterWrapper from "../../layouts/DateOrDisasterWrapper.tsx";
 import dateIcon from "../../../assets/images/title-icon.svg"
 import DefaultButton from "../../button/DefaultButton.tsx";
 import {useNavigate} from "react-router-dom";
@@ -25,7 +24,7 @@ export default function DateOrDisasterLandingPage(){
 
     return(
         <>
-            <DateOrDisasterWrapper>
+            <div className={'no-border h-dvh app-wrapper date-or-disaster p-5 flex items-center flex-col  w-full '}>
                 <div className={"flex flex-col flex-1 items-center "}>
                     <img src={dateIcon} alt={""}/>
                     <p className={"text-white font-[Satoshi-Bold] md:max-w-[412px] text-base text-center"}> Are you a dream partner or just pure
@@ -33,7 +32,8 @@ export default function DateOrDisasterLandingPage(){
                     </p>
                     <DefaultButton style={{marginTop:"40px"}} customClass={"w-full max-w-[232px] md:max-w-[444px]"} onClick={()=>startQuiz()} text={"Start Quiz"}/>
                 </div>
-            </DateOrDisasterWrapper>
+                <footer  className={"no-border footer-text flex-nowrap text-white"}>Made with ❤️ by <span className={"no-border underline"}>Adaeze</span> and <span className={" no-border underline"}>Bibi</span></footer>
+            </div>
         </>
     )
 }
