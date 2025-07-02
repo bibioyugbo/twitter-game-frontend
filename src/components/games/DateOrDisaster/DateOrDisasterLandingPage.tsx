@@ -30,7 +30,7 @@ export default function DateOrDisasterLandingPage(){
                     <p className={"text-white font-[Satoshi-Bold] md:max-w-[412px] text-base text-center"}> Are you a dream partner or just pure
                         stress? Take this quiz to find out!
                     </p>
-                    <DefaultButton style={{marginTop:"40px"}} customClass={"w-full max-w-[232px] md:max-w-[444px]"} onClick={()=>startQuiz()} text={"Start Quiz"}/>
+                    <DefaultButton style={{marginTop:"40px"}} customClass={"w-full max-w-[232px] max-h-[64px] md:max-w-[444px]"} onClick={()=>startQuiz()} text={"Start Quiz"}/>
                 </div>
                 <footer  className={"no-border footer-text flex-nowrap text-white"}>Made with ❤️ by <span className={"no-border underline"}>Adaeze</span> and <span className={" no-border underline"}>Bibi</span></footer>
             </div>

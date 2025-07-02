@@ -7,7 +7,7 @@ import Loader from "@/components/loader/Loader.tsx";
 import {useEffect, useRef, useState} from "react";
 import domtoimage from 'dom-to-image-more';
 // import domtoimage from 'dom-to-image-more';
-import shareImg from "../../../assets/images/share.svg"
+import shareImg from "../../../assets/images/export.svg"
 
 
 
@@ -285,10 +285,10 @@ export default function DatingAnswer (){
                 <DateOrDisasterWrapper>
                     {
                         loading? <Loader showLoader={loading}/>:
-                            <div className={" no-border flex gap-4 flex-col w-full items-center"}>
-                                <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
+                            <div className={" no-border mt-[20px] flex gap-4 flex-col w-full items-center"}>
+                                <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
                                     <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
-                                    <div className="bg-white p-5 pb-12 flex flex-col items-center rounded-[32px] md:w-[476px] w-full">
+                                    <div className="bg-white p-5 pb-12 flex flex-col items-center rounded-[18px] md:w-[476px] w-full">
                                         <p className={"no-border  text-[#A6A5A5] text-base"}>you are {daterType?.name !== "Difficult to Date 🐍"? "a": ""}</p>
                                         <p className={"no-border  text-[#010101] my-3 font-[Recoleta-Bold] text-3xl"}>{daterType?.name}</p>
                                         <p className={"no-border text-[#646363] font-medium text-base"}>{daterType?.description}</p>
@@ -302,14 +302,12 @@ export default function DatingAnswer (){
 
                                     {showButton?
                                         <button onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[64px] w-[64px]"}>
-                                            <img className={"no-border"} src={shareImg} height={30} width={30} alt={""}/>
+                                            <img className={"no-border"} src={shareImg} height={24} width={24} alt={""}/>
                                         </button>: <p className={"text-white"}>Processing Image...</p>
                                     }
 
-
-
-                                    <button onClick={downloadResult} className={" no-border hidden md:flex  bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
-                                        <img className={"no-border"} src={importImg} height={30} width={30} alt={""}/>
+                                    <button onClick={downloadResult} className={" no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
+                                        <img className={"no-border"} src={importImg} height={24} width={24} alt={""}/>
                                     </button>
                                     {/*        {showModal && imageUrl &&*/}
                                     {/*            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">*/}
