@@ -6,7 +6,6 @@ import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
 import {useEffect, useRef, useState} from "react";
 import domtoimage from 'dom-to-image-more';
-// import domtoimage from 'dom-to-image-more';
 import shareImg from "../../../assets/images/export.svg"
 
 
@@ -345,6 +344,8 @@ export default function DatingAnswer (){
                                     {/*    </div>*/}
                                     {/*)}*/}
                                 </div>
+                                <footer className={"no-border footer-text flex-nowrap text-xs md:text-sm text-white"}>Made with ❤️ by <span className={"no-border underline"}>Adaeze</span> and <span className={" no-border underline"}>Bibi</span></footer>
+
                             </div>
 
                     }

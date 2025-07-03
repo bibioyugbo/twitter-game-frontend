@@ -20,7 +20,6 @@ export default function DateOrDisasterWrapper({...props}:DateOrDisasterWrapperPr
                     </div>
                 </div>
 
-                <footer className={"no-border footer-text flex-nowrap text-xs md:text-sm text-white"}>Made with ❤️ by <span className={"no-border underline"}>Adaeze</span> and <span className={" no-border underline"}>Bibi</span></footer>
             </div>
 
         </>
