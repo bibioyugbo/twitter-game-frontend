@@ -1,4 +1,3 @@
-import dateIcon from "../../../assets/images/logo.svg"
 import DefaultButton from "../../button/DefaultButton.tsx";
 import {useNavigate} from "react-router-dom";
 import {fetchQuestions} from "@/store/modules/questionSlice.ts";
