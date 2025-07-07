@@ -281,8 +281,9 @@ export default function DatingAnswer (){
     return(
         <>
             <div className={"no-border"} ref={resultRef}>
-                <DateOrDisasterWrapper>
-                    {
+                <div className={'no-border justify-center h-dvh app-wrapper date-or-disaster p-5 flex items-center flex-col  w-full '}>
+
+                {
                         loading? <Loader showLoader={loading}/>:
                             <div className={" no-border mt-[20px] flex gap-4 flex-col w-full items-center"}>
                                 <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
@@ -300,13 +301,17 @@ export default function DatingAnswer (){
 
 
                                     {showButton?
-                                        <button onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[64px] w-[64px]"}>
-                                            <img className={"no-border"} src={shareImg} height={24} width={24} alt={""}/>
+                                        <button onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                            <img className={"no-border h-6 w-6  md:h-[30px] md:w-[30px]"} src={shareImg} alt={""}/>
                                         </button>: <p className={"text-white"}>Processing Image...</p>
                                     }
 
-                                    <button onClick={downloadResult} className={" no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center  justify-center rounded-[64px] h-[64px] w-[64px]"}>
-                                        <img className={"no-border"} src={importImg} height={24} width={24} alt={""}/>
+                                    <button onClick={downloadResult} className={" no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center  justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                        <img
+                                            className="no-border h-6 w-6  md:h-[30px] md:w-[30px]"
+                                            src={importImg}
+                                            alt=""
+                                        />
                                     </button>
                                     {/*        {showModal && imageUrl &&*/}
                                     {/*            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">*/}
@@ -349,7 +354,7 @@ export default function DatingAnswer (){
                             </div>
 
                     }
-                </DateOrDisasterWrapper>
+                </div>
             </div>
 
         </>
