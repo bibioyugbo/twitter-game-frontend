@@ -1,4 +1,3 @@
-import DateOrDisasterWrapper from "@/components/layouts/DateOrDisasterWrapper.tsx";
 import dateIcon from "../../../assets/images/date-disaster-icon.svg"
 import importImg from "../../../assets/images/import.svg"
 import {useSelector} from "react-redux";
