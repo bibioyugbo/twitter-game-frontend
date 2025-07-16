@@ -163,20 +163,27 @@ export default function DatingAnswer (){
     // };
     const shareWithImage = async () => {
         const node = resultRef.current;
-        if (!node) {
-            console.error(`Element not found`);
+        const buttons = buttonsRef.current;
+
+        if (!node || !buttons) {
+            console.error(`Missing DOM references`);
             return;
         }
 
         try {
+
+            buttons.style.visibility = "hidden";
+
             await document.fonts.ready;
-            const scale = 3; // or 3 for ultra HD
+
+            const scale = 2;
             const style = {
                 transform: `scale(${scale})`,
                 transformOrigin: 'top left',
                 width: `${node.offsetWidth}px`,
                 height: `${node.offsetHeight}px`,
             };
+
             node.scrollIntoView({ behavior: "auto", block: "center" });
             await new Promise(resolve => requestAnimationFrame(resolve));
             await new Promise(resolve => setTimeout(resolve, 300));
@@ -189,7 +196,8 @@ export default function DatingAnswer (){
 
             const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
 
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            // ✅ Share with image if supported
+            if (navigator.canShare?.({ files: [file] })) {
                 await navigator.share({
                     title: "Date or Disaster",
                     text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
@@ -197,17 +205,35 @@ export default function DatingAnswer (){
                     url: 'https://date-or-disaster.netlify.app',
                 });
             }
-            // else {
-            //     // fallback
-            //     setImageUrl(URL.createObjectURL(file));
-            //     setShowModal(true);
-            // }
 
+            // ✅ If image sharing not supported, share link instead
+            else if (navigator.share) {
+                await navigator.share({
+                    title: "Date or Disaster",
+                    text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
+                    url: 'https://date-or-disaster.netlify.app',
+                });
+            }
+
+            // ✅ Fallback: download image
+            else {
+                const url = URL.createObjectURL(file);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "date-or-disaster.png";
+                link.click();
+            }
         } catch (err) {
             console.error("Sharing failed", err);
             alert("Sharing is not supported or failed.");
+        } finally {
+
+            if (buttons) buttons.style.visibility = "visible";
         }
     };
+
+
+
 
     // const downloadResult = async (sectionId:string) => {
     //     try {
@@ -317,7 +343,7 @@ export default function DatingAnswer (){
                                         {/*}*/}
 
                                         <button onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
-                                            <img className={"no-border h-6 w-6  md:h-[30px] md:w-[30px]"} src={shareImg} alt={""}/>
+                                            <img className={"no-border h-6 w-6  md:h-[25px] md:w-[25px]"} src={shareImg} alt={""}/>
                                         </button>
 
                                         <button onClick={downloadResult} className={" hidden no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform md:flex items-center  justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
