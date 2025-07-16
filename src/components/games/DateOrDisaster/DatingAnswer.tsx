@@ -161,20 +161,6 @@ export default function DatingAnswer (){
     //         }
     //     }
     // };
-    const waitUntilFontIsVisible = (
-        el: HTMLElement,
-        fontFamily: string
-    ): Promise<void> => {
-        return new Promise<void>((resolve) => {
-            const interval = setInterval(() => {
-                const applied = getComputedStyle(el).fontFamily.includes(fontFamily);
-                if (applied) {
-                    clearInterval(interval);
-                    resolve();
-                }
-            }, 50);
-        });
-    };
     const shareWithImage = async () => {
         const node = resultRef.current;
         const buttons = buttonsRef.current;
@@ -190,11 +176,11 @@ export default function DatingAnswer (){
 
             const preloadFont = document.createElement("span");
             preloadFont.style.cssText = `
-              position: absolute;
-              visibility: hidden;
-              font-family: "Recoleta-Bold";
-              font-size: 1rem;
-            `;
+                  position: absolute;
+                  visibility: hidden;
+                  font-family: "Recoleta-Bold";
+                  font-size: 1rem;
+                `;
             preloadFont.innerText = "PreloadFont";
             document.body.appendChild(preloadFont);
 
@@ -211,15 +197,9 @@ export default function DatingAnswer (){
             };
 
             node.scrollIntoView({ behavior: "auto", block: "center" });
-
-
             await new Promise((resolve) => requestAnimationFrame(() => {
                 requestAnimationFrame(resolve);
             }));
-
-            preloadFont.remove();
-
-            await waitUntilFontIsVisible(node, "Recoleta-Bold");
 
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
