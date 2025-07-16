@@ -185,8 +185,9 @@ export default function DatingAnswer (){
             };
 
             node.scrollIntoView({ behavior: "auto", block: "center" });
-            await new Promise(resolve => requestAnimationFrame(resolve));
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise((resolve) => requestAnimationFrame(() => {
+                requestAnimationFrame(resolve);
+            }));
 
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
