@@ -320,7 +320,7 @@ export default function DatingAnswer (){
                                             <img className={"no-border h-6 w-6  md:h-[30px] md:w-[30px]"} src={shareImg} alt={""}/>
                                         </button>
 
-                                        <button onClick={downloadResult} className={" no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center  justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                        <button onClick={downloadResult} className={" hidden no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform md:flex items-center  justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img
                                                 className="no-border h-6 w-6  md:h-[30px] md:w-[30px]"
                                                 src={importImg}
