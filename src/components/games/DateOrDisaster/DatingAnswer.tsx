@@ -174,7 +174,18 @@ export default function DatingAnswer (){
 
             buttons.style.display = "none";
 
-            await document.fonts.load('1rem "Recoleta-Bold"');
+            const preloadFont = document.createElement("span");
+            preloadFont.style.cssText = `
+              position: absolute;
+              visibility: hidden;
+              font-family: "Recoleta-Bold";
+              font-size: 1rem;
+            `;
+            preloadFont.innerText = "PreloadFont";
+            document.body.appendChild(preloadFont);
+
+// Now trigger load explicitly
+            await document.fonts.load('bold 1rem "Recoleta-Bold"');
             await document.fonts.ready;
 
             const scale = 2;
@@ -189,6 +200,9 @@ export default function DatingAnswer (){
             await new Promise((resolve) => requestAnimationFrame(() => {
                 requestAnimationFrame(resolve);
             }));
+
+            preloadFont.remove();
+
 
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
