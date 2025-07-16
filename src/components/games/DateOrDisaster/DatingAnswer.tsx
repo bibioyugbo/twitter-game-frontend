@@ -172,7 +172,7 @@ export default function DatingAnswer (){
 
         try {
 
-            buttons.style.visibility = "hidden";
+            buttons.style.display = "none";
 
             await document.fonts.ready;
 
@@ -228,7 +228,7 @@ export default function DatingAnswer (){
             alert("Sharing is not supported or failed.");
         } finally {
 
-            if (buttons) buttons.style.visibility = "visible";
+            if (buttons) buttons.style.display = "flex";
         }
     };
 
