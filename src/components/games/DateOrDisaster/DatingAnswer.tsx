@@ -171,22 +171,44 @@ export default function DatingAnswer (){
         }
 
         try {
-
             buttons.style.display = "none";
 
+            // 1. First, ensure font is loaded
+            await document.fonts.load('bold 1rem "Recoleta-Bold"');
+            await document.fonts.ready;
+
+            // 2. Create invisible element to trigger font rendering
             const preloadFont = document.createElement("span");
             preloadFont.style.cssText = `
-                  position: absolute;
-                  visibility: hidden;
-                  font-family: "Recoleta-Bold";
-                  font-size: 1rem;
-                `;
+            position: absolute;
+            visibility: hidden;
+            font-family: "Recoleta-Bold";
+            font-weight: bold;
+            font-size: 1rem;
+        `;
             preloadFont.innerText = "PreloadFont";
             document.body.appendChild(preloadFont);
 
-// Now trigger load explicitly
-            await document.fonts.load('bold 1rem "Recoleta-Bold"');
-            await document.fonts.ready;
+            // 3. Wait for the font to be applied and rendered
+            await new Promise<void>(resolve => {
+                const checkFont = () => {
+                    const computedStyle = getComputedStyle(preloadFont);
+                    if (computedStyle.fontFamily.includes('Recoleta-Bold')) {
+                        resolve();
+                    } else {
+                        requestAnimationFrame(checkFont);
+                    }
+                };
+                requestAnimationFrame(checkFont);
+            });
+
+            // 4. Clean up the test element
+            preloadFont.remove();
+
+            // 5. Force a reflow to ensure fonts are applied to your content
+            node.style.display = 'none';
+            void node.offsetHeight; // Force reflow
+            node.style.display = '';
 
             const scale = 2;
             const style = {
@@ -197,8 +219,12 @@ export default function DatingAnswer (){
             };
 
             node.scrollIntoView({ behavior: "auto", block: "center" });
-            await new Promise((resolve) => requestAnimationFrame(() => {
-                requestAnimationFrame(resolve);
+
+            // 6. Wait for multiple frames to ensure everything is rendered
+            await new Promise(resolve => requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(resolve);
+                });
             }));
 
             const blob = await domtoimage.toBlob(node, {
@@ -209,7 +235,7 @@ export default function DatingAnswer (){
 
             const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
 
-            // ✅ Share with image if supported
+            // Rest of your sharing logic...
             if (navigator.canShare?.({ files: [file] })) {
                 await navigator.share({
                     title: "Date or Disaster",
@@ -217,30 +243,24 @@ export default function DatingAnswer (){
                     files: [file],
                     url: 'https://date-or-disaster.netlify.app',
                 });
-            }
-
-            // ✅ If image sharing not supported, share link instead
-            else if (navigator.share) {
+            } else if (navigator.share) {
                 await navigator.share({
                     title: "Date or Disaster",
                     text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
                     url: 'https://date-or-disaster.netlify.app',
                 });
-            }
-
-            // ✅ Fallback: download image
-            else {
+            } else {
                 const url = URL.createObjectURL(file);
                 const link = document.createElement("a");
                 link.href = url;
                 link.download = "date-or-disaster.png";
                 link.click();
+                URL.revokeObjectURL(url);
             }
         } catch (err) {
             console.error("Sharing failed", err);
             alert("Sharing is not supported or failed.");
         } finally {
-
             if (buttons) buttons.style.display = "flex";
         }
     };
