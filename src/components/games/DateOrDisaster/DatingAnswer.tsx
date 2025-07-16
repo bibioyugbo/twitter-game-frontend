@@ -174,6 +174,7 @@ export default function DatingAnswer (){
 
             buttons.style.display = "none";
 
+            await document.fonts.load('1rem "Recoleta-Bold"');
             await document.fonts.ready;
 
             const scale = 2;
