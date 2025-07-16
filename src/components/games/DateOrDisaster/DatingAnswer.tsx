@@ -173,42 +173,51 @@ export default function DatingAnswer (){
         try {
             buttons.style.display = "none";
 
-            // 1. First, ensure font is loaded
+            // 1. Load the font and wait for it to be ready
             await document.fonts.load('bold 1rem "Recoleta-Bold"');
             await document.fonts.ready;
 
-            // 2. Create invisible element to trigger font rendering
-            const preloadFont = document.createElement("span");
-            preloadFont.style.cssText = `
-            position: absolute;
-            visibility: hidden;
-            font-family: "Recoleta-Bold";
-            font-weight: bold;
-            font-size: 1rem;
-        `;
-            preloadFont.innerText = "PreloadFont";
-            document.body.appendChild(preloadFont);
+            // 2. Verify font is actually loaded using FontFace check
+            const fontLoaded = await new Promise(resolve => {
+                const checkInterval = setInterval(() => {
+                    const fontFace = [...document.fonts].find(f =>
+                        f.family === 'Recoleta-Bold' && f.status === 'loaded'
+                    );
 
-            // 3. Wait for the font to be applied and rendered
-            await new Promise<void>(resolve => {
-                const checkFont = () => {
-                    const computedStyle = getComputedStyle(preloadFont);
-                    if (computedStyle.fontFamily.includes('Recoleta-Bold')) {
-                        resolve();
-                    } else {
-                        requestAnimationFrame(checkFont);
+                    if (fontFace) {
+                        clearInterval(checkInterval);
+                        resolve(true);
                     }
-                };
-                requestAnimationFrame(checkFont);
+                }, 50);
+
+                // Timeout after 3 seconds
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    resolve(false);
+                }, 3000);
             });
 
-            // 4. Clean up the test element
-            preloadFont.remove();
+            if (!fontLoaded) {
+                console.warn('Font not loaded, sharing may have fallback fonts');
+            }
 
-            // 5. Force a reflow to ensure fonts are applied to your content
+            // 3. Force font rendering in the actual content
+            const allTextElements = node.querySelectorAll('*');
+            allTextElements.forEach(el => {
+                if (el instanceof HTMLElement) {
+                    const style = getComputedStyle(el);
+                    if (style.fontFamily.includes('Recoleta-Bold')) {
+                        // Force a style recalculation
+                        el.style.fontFamily = style.fontFamily;
+                    }
+                }
+            });
+
+            // 4. Force multiple reflows
             node.style.display = 'none';
             void node.offsetHeight; // Force reflow
             node.style.display = '';
+            void node.offsetHeight; // Force another reflow
 
             const scale = 2;
             const style = {
@@ -220,12 +229,19 @@ export default function DatingAnswer (){
 
             node.scrollIntoView({ behavior: "auto", block: "center" });
 
-            // 6. Wait for multiple frames to ensure everything is rendered
-            await new Promise(resolve => requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(resolve);
-                });
-            }));
+            // 5. Wait longer for font rendering
+            await new Promise<void>(resolve => {
+                let frameCount = 0;
+                const waitFrames = () => {
+                    frameCount++;
+                    if (frameCount >= 5) { // Wait 5 frames
+                        resolve();
+                    } else {
+                        requestAnimationFrame(waitFrames);
+                    }
+                };
+                requestAnimationFrame(waitFrames);
+            });
 
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
