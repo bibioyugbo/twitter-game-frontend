@@ -5,7 +5,9 @@ import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
 import Loader from "@/components/loader/Loader.tsx";
 import {useRef} from "react";
 import domtoimage from 'dom-to-image-more';
-import shareImg from "../../../assets/images/export.svg"
+import shareImg from "../../../assets/images/export.svg";
+import reverseImg from "../../../assets/images/reverse2.svg"
+import {useNavigate} from "react-router-dom";
 
 
 
@@ -15,11 +17,15 @@ export default function DatingAnswer (){
 
     const resultRef = useRef<HTMLDivElement>(null)
     const buttonsRef = useRef<HTMLDivElement>(null)
+    const navigate = useNavigate()
     // const [showButton, setShowButton] = useState(false);
 
     // const [imageUrl, setImageUrl] = useState<string | null>(null);
     // const [showModal, setShowModal] = useState(false);
 
+    const goToStart=()=>{
+        navigate("/")
+    }
     const downloadResult = async () => {
         const node = resultRef.current;
         const buttons = buttonsRef.current
@@ -390,10 +396,13 @@ export default function DatingAnswer (){
                                         {/*        <img className={"no-border h-6 w-6  md:h-[30px] md:w-[30px]"} src={shareImg} alt={""}/>*/}
                                         {/*    </button>: <p className={"no-border text-white"}>Processing Image...</p>*/}
                                         {/*}*/}
-
+                                        <button onClick={goToStart} className={"no-border md:hidden bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                            <img className={"no-border h-7 w-7"} src={reverseImg} alt={""}/>
+                                        </button>
                                         <button onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-6 w-6  md:h-[25px] md:w-[25px]"} src={shareImg} alt={""}/>
                                         </button>
+
 
                                         <button onClick={downloadResult} className={" hidden no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform md:flex items-center  justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img
