@@ -60,7 +60,6 @@ export default function DatingQuestions(){
             return;
         }
         else if (questionCount < 8){
-            console.log("Bibi was here")
             setQuestionCount(questionCount + 1)
             setCurrentPage(prev => prev + 1)
             updateProgress()

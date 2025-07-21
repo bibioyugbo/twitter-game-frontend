@@ -14,7 +14,6 @@ import {useNavigate} from "react-router-dom";
 export default function DatingAnswer (){
     const daterType = useSelector(dataType)
     const loading = useSelector(dataTypeLoading);
-
     const resultRef = useRef<HTMLDivElement>(null)
     const buttonsRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
