@@ -18,6 +18,9 @@ module.exports = {
             animation: {
                 shake: 'shake 0.4s ease-in-out',
             },
+            fontFamily: {
+                courier: ['"Courier New"', 'Courier', 'monospace'],
+            },
         },
     },
     plugins: [],

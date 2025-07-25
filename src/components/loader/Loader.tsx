@@ -12,7 +12,7 @@ export default function Loader({...props}:LoaderProps){
                         <div className={"bg-[#D8D841] rounded-[100%] border-[#F5F507] h-[14px] w-[13px]"}/>
                         <div className={"bg-[#00BB00] rounded-[100%] h-[14px] w-[13px]"}/>
                     </div>
-                    <div className={"px-5 py-3 text-[#11A401] text-base font-normal flex text-left mt-6.5 "}>
+                    <div  style={{ fontFamily: '"Courier New", Courier, monospace' }} className={"px-5 py-3 text-[#11A401] text-base flex text-left mt-6.5 "}>
                         Loading...
                     </div>
                 </div>
