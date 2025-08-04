@@ -183,7 +183,7 @@ export default function DatingAnswer (){
             await document.fonts.ready;
 
             // 2. Verify font is actually loaded using FontFace check
-            const fontLoaded = await new Promise(resolve => {
+            const fontLoaded = await new Promise<boolean>(resolve => {
                 const checkInterval = setInterval(() => {
                     const fontFace = [...document.fonts].find(f =>
                         f.family === 'Recoleta-Bold' && f.status === 'loaded'
@@ -195,11 +195,11 @@ export default function DatingAnswer (){
                     }
                 }, 50);
 
-                // Timeout after 3 seconds
+                // Timeout after 5 seconds (increased from 3)
                 setTimeout(() => {
                     clearInterval(checkInterval);
                     resolve(false);
-                }, 3000);
+                }, 5000);
             });
 
             if (!fontLoaded) {
@@ -234,12 +234,12 @@ export default function DatingAnswer (){
 
             node.scrollIntoView({ behavior: "auto", block: "center" });
 
-            // 5. Wait longer for font rendering
+            // 5. Extended wait for font rendering and DOM stabilization
             await new Promise<void>(resolve => {
                 let frameCount = 0;
                 const waitFrames = () => {
                     frameCount++;
-                    if (frameCount >= 5) { // Wait 5 frames
+                    if (frameCount >= 10) { // Increased from 5 to 10 frames
                         resolve();
                     } else {
                         requestAnimationFrame(waitFrames);
@@ -247,6 +247,12 @@ export default function DatingAnswer (){
                 };
                 requestAnimationFrame(waitFrames);
             });
+
+            // 6. Additional timeout to ensure everything is stable
+            await new Promise<void>(resolve => setTimeout(resolve, 1000)); // 1 second delay
+
+            // 7. One final reflow before capture
+            void node.offsetHeight;
 
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
