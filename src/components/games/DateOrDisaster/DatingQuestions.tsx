@@ -1,7 +1,7 @@
 import DateOrDisasterWrapper from "../../layouts/DateOrDisasterWrapper.tsx";
 import DefaultButton from "../../button/DefaultButton.tsx";
 import { Progress } from "@/components/ui/progress"
-import {useState} from "react";
+import { useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Loader from "@/components/loader/Loader.tsx";
 import {useDispatch, useSelector} from "react-redux";
@@ -19,12 +19,20 @@ export default function DatingQuestions(){
     const [progress, setProgress] = useState(12.5)
     const [isNotSelected, setIsNotSelected] = useState(false)
     const loading = useSelector(selectQuestionsLoading);
-    // const loading = true;
+
+    // const daterType = useSelector(dataType)
+
+    // let loading
     const [questionCount, setQuestionCount] = useState(1)
     const navigate = useNavigate()
     const questions = useSelector(selectQuestions);
     const [selectedOptions, setSelectedOptions] = useState<{ [questionIndex: number]: number | null }>({});
     const dispatch = useDispatch<AppDispatch>();
+
+    const [isLoadingResults, setIsLoadingResults] = useState(false);
+    // const loading = isLoadingResults;
+
+    // const [isResultsReady, setIsResultsReady] = useState(false);
 
     function updateProgress(){
         setProgress(progress + 11.11)
@@ -35,7 +43,7 @@ export default function DatingQuestions(){
     clickSound.preload = 'auto'; // Preload the audio file
 
 
-    function getCharacter() {
+    async function getCharacter() {
         const body: DaterTypeRequest = {
             q1: getLetter(selectedOptions[0]),
             q2: getLetter(selectedOptions[1]),
@@ -47,8 +55,41 @@ export default function DatingQuestions(){
             q8: getLetter(selectedOptions[7]),
         };
         console.log("User answers:", body);
-        dispatch(getDaterType(body));
-        navigate("/date-or-disaster")
+
+        try {
+            // Show loading state
+            setIsLoadingResults(true);
+
+            // Dispatch and wait for the results
+            const resultAction = await dispatch(getDaterType(body));
+
+            // Check if the request was successful
+            if (getDaterType.fulfilled.match(resultAction)) {
+                const daterTypeResult = resultAction.payload;
+
+                // Pre-load fonts while we have the results
+                await document.fonts.load('bold 1rem "Recoleta-Bold"');
+                await document.fonts.ready;
+
+                // Navigate with the results data
+                navigate("/date-or-disaster", {
+                    state: {
+                        daterType: daterTypeResult,
+                        preloaded: true
+                    }
+                });
+            } else {
+                // Handle error
+                console.error("Failed to get character type");
+                setIsLoadingResults(false);
+            }
+        } catch (error) {
+            console.error("Error getting character:", error);
+            setIsLoadingResults(false);
+        }
+
+        // dispatch(getDaterType(body));
+        // navigate("/date-or-disaster")
     }
     function goToNextQuestion(){
         console.log("Your selected object before:",selectedOptions)
@@ -91,12 +132,31 @@ export default function DatingQuestions(){
     }
 
 
+    // useEffect(() => {
+    //     if (daterType && isLoadingResults) {
+    //         // Results have loaded, now wait for DOM to be ready for sharing
+    //         const prepareForSharing = async () => {
+    //             // Wait for fonts to load
+    //             await document.fonts.load('bold 1rem "Recoleta-Bold"');
+    //             await document.fonts.ready;
+    //
+    //             // Wait a bit more for DOM to stabilize
+    //             await new Promise<void>(resolve => setTimeout(resolve, 1000));
+    //
+    //             // Mark as ready for sharing
+    //             setIsResultsReady(true);
+    //             setIsLoadingResults(false);
+    //         };
+    //
+    //         prepareForSharing();
+    //     }
+    // }, [daterType, isLoadingResults]);
 
 
     return(
         <>
             <DateOrDisasterWrapper>
-                {loading?
+                {loading || isLoadingResults?
                     <Loader showLoader={loading}/>:
                     <div className=" overflow-scroll items-center justify-center flex flex-col ">
                         <div className="text-white font-[Satoshi-Bold] text-base md:text-xl">

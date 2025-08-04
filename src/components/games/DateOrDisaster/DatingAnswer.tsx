@@ -1,26 +1,37 @@
 import dateIcon from "../../../assets/images/date-disaster-icon.svg"
 import importImg from "../../../assets/images/import.svg"
 import {useSelector} from "react-redux";
-import {dataType, dataTypeLoading} from "@/store/modules/questionSlice.ts";
-import Loader from "@/components/loader/Loader.tsx";
-import {useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import domtoimage from 'dom-to-image-more';
 import shareImg from "../../../assets/images/export.svg";
 import reverseImg from "../../../assets/images/reverse2.svg"
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
+import Loader from "@/components/loader/Loader.tsx";
+import {RootState} from "@/store";
 
 
 
 export default function DatingAnswer (){
-    const daterType = useSelector(dataType)
-    const loading = useSelector(dataTypeLoading);
+    // const daterType = useSelector(dataType)
+    // const loading = useSelector(dataTypeLoading);
     const resultRef = useRef<HTMLDivElement>(null)
     const buttonsRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
+    const location = useLocation();
     // const [showButton, setShowButton] = useState(false);
 
     // const [imageUrl, setImageUrl] = useState<string | null>(null);
     // const [showModal, setShowModal] = useState(false);
+
+    const routeData = location.state;
+    const { daterType: reduxDaterType } = useSelector((state: RootState) => state.daterType);
+
+    const daterType = routeData?.daterType || reduxDaterType;
+    const isPreloaded = routeData?.preloaded || false;
+
+    const [isReady, setIsReady] = useState(isPreloaded);
+
+
 
     const goToStart=()=>{
         navigate("/")
@@ -53,119 +64,7 @@ export default function DatingAnswer (){
             if (buttons) buttons.style.display = '';
         }
     };
-    // const shareWithImage = async () => {
-    //     const node = resultRef.current;
-    //     if (!node) {
-    //         console.error(`Element not found`);
-    //         return;
-    //     }
-    //
-    //     // First, let's test if sharing works at all
-    //     console.log('Testing navigator.share capability...');
-    //     console.log('navigator.share exists:', !!navigator.share);
-    //     console.log('navigator.canShare exists:', !!navigator.canShare);
-    //
-    //     // Test basic text sharing first
-    //     if (navigator.share) {
-    //         try {
-    //             console.log('Attempting basic text share...');
-    //             await navigator.share({
-    //                 title: "Date or Disaster",
-    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
-    //             });
-    //             console.log('Basic text sharing worked!');
-    //             return; // Remove this return after testing
-    //         } catch (textErr) {
-    //             console.error('Basic text sharing failed:', textErr);
-    //         }
-    //     }
-    //
-    //     // Now try with image generation
-    //     try {
-    //         console.log('Starting image generation process...');
-    //         await document.fonts.ready;
-    //         console.log('Fonts ready');
-    //
-    //         const scale = 2; // Reduced scale for better mobile performance
-    //         const style = {
-    //             transform: `scale(${scale})`,
-    //             transformOrigin: 'top left',
-    //             width: `${node.offsetWidth}px`,
-    //             height: `${node.offsetHeight}px`,
-    //         };
-    //
-    //         node.scrollIntoView({ behavior: "auto", block: "center" });
-    //         await new Promise(resolve => requestAnimationFrame(resolve));
-    //         await new Promise(resolve => setTimeout(resolve, 500));
-    //
-    //         console.log('About to generate blob...');
-    //         const blob = await domtoimage.toBlob(node, {
-    //             width: node.offsetWidth * scale,
-    //             height: node.offsetHeight * scale,
-    //             style,
-    //             quality: 0.9, // Slightly lower quality for better compatibility
-    //         });
-    //
-    //         console.log('Blob generated:', !!blob);
-    //         if (!blob) {
-    //             throw new Error('Blob generation returned null');
-    //         }
-    //
-    //         const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
-    //         console.log('File created, size:', file.size);
-    //
-    //         // Test file sharing capability
-    //         if (navigator.canShare) {
-    //             const canShareFile = navigator.canShare({ files: [file] });
-    //             console.log('Can share files:', canShareFile);
-    //         }
-    //
-    //         if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    //             console.log('Attempting to share with file...');
-    //             await navigator.share({
-    //                 title: "Date or Disaster",
-    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉`,
-    //                 files: [file],
-    //                 url: 'https://date-or-disaster.netlify.app',
-    //             });
-    //             console.log('File sharing successful!');
-    //         } else if (navigator.share) {
-    //             console.log('File sharing not supported, trying text only...');
-    //             await navigator.share({
-    //                 title: "Date or Disaster",
-    //                 text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
-    //             });
-    //             console.log('Text sharing successful!');
-    //         } else {
-    //             console.log('No sharing support, using fallback...');
-    //             // Your modal fallback
-    //             // const imageUrl = URL.createObjectURL(file);
-    //             // setImageUrl(imageUrl);
-    //             // setShowModal(true);
-    //         }
-    //
-    //         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     } catch (err) {
-    //         console.error('Error details:');
-    //
-    //         // Try text sharing as last resort
-    //         if (navigator.share) {
-    //             try {
-    //                 console.log('Attempting fallback text sharing...');
-    //                 await navigator.share({
-    //                     title: "Date or Disaster",
-    //                     text: `I am a ${daterType?.name}!\nFind out yours! 👉 https://date-or-disaster.netlify.app`,
-    //                 });
-    //                 console.log('Fallback text sharing worked!');
-    //             } catch (shareErr) {
-    //                 console.error('Fallback sharing also failed:', shareErr);
-    //                 alert(`Sharing failed. Error:`);
-    //             }
-    //         } else {
-    //             alert(`Sharing not supported. Error: `);
-    //         }
-    //     }
-    // };
+
     const shareWithImage = async () => {
         const node = resultRef.current;
         const buttons = buttonsRef.current;
@@ -178,52 +77,6 @@ export default function DatingAnswer (){
         try {
             buttons.style.display = "none";
 
-            // 1. Load the font and wait for it to be ready
-            await document.fonts.load('bold 1rem "Recoleta-Bold"');
-            await document.fonts.ready;
-
-            // 2. Verify font is actually loaded using FontFace check
-            const fontLoaded = await new Promise<boolean>(resolve => {
-                const checkInterval = setInterval(() => {
-                    const fontFace = [...document.fonts].find(f =>
-                        f.family === 'Recoleta-Bold' && f.status === 'loaded'
-                    );
-
-                    if (fontFace) {
-                        clearInterval(checkInterval);
-                        resolve(true);
-                    }
-                }, 50);
-
-                // Timeout after 5 seconds (increased from 3)
-                setTimeout(() => {
-                    clearInterval(checkInterval);
-                    resolve(false);
-                }, 5000);
-            });
-
-            if (!fontLoaded) {
-                console.warn('Font not loaded, sharing may have fallback fonts');
-            }
-
-            // 3. Force font rendering in the actual content
-            const allTextElements = node.querySelectorAll('*');
-            allTextElements.forEach(el => {
-                if (el instanceof HTMLElement) {
-                    const style = getComputedStyle(el);
-                    if (style.fontFamily.includes('Recoleta-Bold')) {
-                        // Force a style recalculation
-                        el.style.fontFamily = style.fontFamily;
-                    }
-                }
-            });
-
-            // 4. Force multiple reflows
-            node.style.display = 'none';
-            void node.offsetHeight; // Force reflow
-            node.style.display = '';
-            void node.offsetHeight; // Force another reflow
-
             const scale = 2;
             const style = {
                 transform: `scale(${scale})`,
@@ -234,25 +87,8 @@ export default function DatingAnswer (){
 
             node.scrollIntoView({ behavior: "auto", block: "center" });
 
-            // 5. Extended wait for font rendering and DOM stabilization
-            await new Promise<void>(resolve => {
-                let frameCount = 0;
-                const waitFrames = () => {
-                    frameCount++;
-                    if (frameCount >= 10) { // Increased from 5 to 10 frames
-                        resolve();
-                    } else {
-                        requestAnimationFrame(waitFrames);
-                    }
-                };
-                requestAnimationFrame(waitFrames);
-            });
-
-            // 6. Additional timeout to ensure everything is stable
-            await new Promise<void>(resolve => setTimeout(resolve, 1000)); // 1 second delay
-
-            // 7. One final reflow before capture
-            void node.offsetHeight;
+            // Just a tiny delay since everything should be loaded
+            await new Promise<void>(resolve => setTimeout(resolve, 100));
 
             const blob = await domtoimage.toBlob(node, {
                 width: node.offsetWidth * scale,
@@ -262,7 +98,6 @@ export default function DatingAnswer (){
 
             const file = new File([blob], "date-or-disaster.png", { type: "image/png" });
 
-            // Rest of your sharing logic...
             if (navigator.canShare?.({ files: [file] })) {
                 await navigator.share({
                     title: "Date or Disaster",
@@ -291,86 +126,22 @@ export default function DatingAnswer (){
             if (buttons) buttons.style.display = "flex";
         }
     };
+    useEffect(() => {
+        if (daterType && !isPreloaded && !isReady) {
+            const prepareForSharing = async () => {
+                // Load fonts
+                await document.fonts.load('bold 1rem "Recoleta-Bold"');
+                await document.fonts.ready;
 
+                // Wait for DOM to stabilize
+                await new Promise<void>(resolve => setTimeout(resolve, 1000));
 
+                setIsReady(true);
+            };
 
-
-    // const downloadResult = async (sectionId:string) => {
-    //     try {
-    //         const section = document.getElementById(sectionId);
-    //         if (!section) {
-    //             console.error(`Element with ID "${sectionId}" not found`);
-    //             return;
-    //         }
-    //
-    //         console.log('Found element:', section);
-    //         console.log('Is in DOM:', document.contains(section));
-    //
-    //         // const html2canvas = (await import('html2canvas')).default;
-    //
-    //         await document.fonts.ready;
-    //         await new Promise(resolve => setTimeout(resolve, 100));
-    //
-    //         const canvas = await html2canvas(section, {
-    //             logging: true,
-    //             useCORS: true,
-    //             // backgroundColor: '#ffffff', // Try with white background instead of null
-    //             // scale: 1, // Reduce scale to see if that helps
-    //             // useCORS: true,
-    //             // allowTaint: true,
-    //             // logging: true, //
-    //             ignoreElements: (element) => {
-    //                 // Skip elements with oklch colors
-    //                 const computedStyle = window.getComputedStyle(element);
-    //                 return computedStyle.backgroundColor.includes('oklch') ||
-    //                     computedStyle.color.includes('oklch');
-    //             }
-    //         });
-    //         console.log("This is your section after", section)
-    //         console.log("This is your canvas", canvas)
-    //         canvas.toBlob((blob:Blob | null) => {
-    //             if (!blob) {
-    //                 console.error('Failed to create blob');
-    //                 return;
-    //             }
-    //             const url = URL.createObjectURL(blob);
-    //             const link = document.createElement('a');
-    //             link.href = url;
-    //             link.download = `date-or-disaster.png`;
-    //             document.body.appendChild(link);
-    //             link.click();
-    //             document.body.removeChild(link);
-    //             URL.revokeObjectURL(url);
-    //         });
-    //     } catch (error) {
-    //         console.error('Error downloading image:', error);
-    //     }
-    // };
-    // const shareToTwitter = () => {
-    //     const text = `Date or Disaster\nI am a ${daterType?.name}!\nhttps://date-or-disaster.netlify.app/\n${imageUrl}\n Find out yours!`;
-    //     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-    //     window.open(url, '_blank');
-    // };
-
-
-    // useEffect(() => {
-    //     const node = document.getElementById('result');
-    //     if (isMobile && node) {
-    //         domtoimage.toBlob(node).then(blob => {
-    //             const url = URL.createObjectURL(blob);
-    //             setImageUrl(url);
-    //         }).catch(err => {
-    //             console.error('Image generation failed', err);
-    //         });
-    //     }
-    // }, [daterType]);
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setShowButton(true);
-    //     }, 10000); // 7 seconds
-    //
-    //     return () => clearTimeout(timer);
-    // }, []);
+            prepareForSharing();
+        }
+    }, [daterType, isPreloaded, isReady]);
 
     return(
         <>
@@ -380,7 +151,7 @@ export default function DatingAnswer (){
 
                         <div className={" no-border mt-[20px] justify-center flex-1 flex gap-4 flex-col w-full items-center"}>
                             {
-                                loading? <Loader showLoader={loading}/>:
+                                (!daterType || !isReady) ? <Loader showLoader={(!daterType || !isReady)}/>:
                                     <div className={"no-border flex flex-col items-center"}>
                                         <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] md:rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
                                         <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
