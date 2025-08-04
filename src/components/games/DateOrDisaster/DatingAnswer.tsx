@@ -451,8 +451,7 @@ export default function DatingAnswer (){
                         </div>
 
 
-                    <footer className={"no-border footer-text flex-nowrap text-xs md:text-sm text-white"}>Made with ❤️ by <span className={"no-border underline"}>Adaeze</span> and <span className={" no-border underline"}>Bibi</span></footer>
-
+                    <footer className={"no-border footer-text flex-nowrap text-xs md:text-sm text-white"}>Made with ❤️ by <a className={"no-border underline"} target="_blank" rel="noopener noreferrer"  href="https://x.com/adathedesigner">Adaeze</a> and <a className={"no-border underline"} target="_blank" rel="noopener noreferrer"  href="https://x.com/bibibuilds">Bibi</a></footer>
 
                 </div>
 
