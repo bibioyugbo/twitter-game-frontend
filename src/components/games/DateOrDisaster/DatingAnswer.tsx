@@ -127,21 +127,32 @@ export default function DatingAnswer (){
         }
     };
     useEffect(() => {
-        if (daterType && !isPreloaded && !isReady) {
+        if (daterType && !isReady) {
             const prepareForSharing = async () => {
-                // Load fonts
                 await document.fonts.load('bold 1rem "Recoleta-Bold"');
                 await document.fonts.ready;
 
-                // Wait for DOM to stabilize
-                await new Promise<void>(resolve => setTimeout(resolve, 1000));
+                // Ensure all images are fully loaded
+                const images = document.images;
+                for (const img of images) {
+                    if (!img.complete) {
+                        await new Promise(resolve => {
+                            img.onload = resolve;
+                            img.onerror = resolve;
+                        });
+                    }
+                }
+
+                // Tiny delay to allow DOM to stabilize visually
+                await new Promise<void>(resolve => setTimeout(resolve, 300));
 
                 setIsReady(true);
             };
 
             prepareForSharing();
         }
-    }, [daterType, isPreloaded, isReady]);
+    }, [daterType, isReady]);
+
 
     return(
         <>
@@ -151,7 +162,7 @@ export default function DatingAnswer (){
 
                         <div className={" no-border mt-[20px] justify-center flex-1 flex gap-4 flex-col w-full items-center"}>
                             {
-                                (!daterType || !isReady) ? <Loader showLoader={(!daterType || !isReady)}/>:
+                                (!daterType || !isReady) ? <Loader showLoader={true}/>:
                                     <div className={"no-border flex flex-col items-center"}>
                                         <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] md:rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
                                         <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
@@ -175,7 +186,7 @@ export default function DatingAnswer (){
                                         <button onClick={goToStart} className={"no-border md:hidden bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-7 w-7"} src={reverseImg} alt={""}/>
                                         </button>
-                                        <button onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                        <button disabled={!isReady} onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-6 w-6  md:h-[25px] md:w-[25px]"} src={shareImg} alt={""}/>
                                         </button>
 

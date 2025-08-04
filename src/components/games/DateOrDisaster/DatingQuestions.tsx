@@ -75,7 +75,7 @@ export default function DatingQuestions(){
                 navigate("/date-or-disaster", {
                     state: {
                         daterType: daterTypeResult,
-                        preloaded: true
+                        preloaded: false
                     }
                 });
             } else {
