@@ -8,7 +8,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     DaterTypeRequest,
     getDaterType,
-    Question,
     selectQuestions,
     selectQuestionsLoading
 } from "@/store/modules/questionSlice.ts";
@@ -25,14 +24,16 @@ export default function DatingQuestions(){
     const navigate = useNavigate()
     const questions = useSelector(selectQuestions);
     const [selectedOptions, setSelectedOptions] = useState<{ [questionIndex: number]: number | null }>({});
-    const questionsToMap = questions
     const dispatch = useDispatch<AppDispatch>();
 
     function updateProgress(){
         setProgress(progress + 11.11)
     }
     const [currentPage, setCurrentPage] = useState(0);
-    const currentQuestions2 = questionsToMap.slice(currentPage, currentPage+1);
+    const currentQuestion = questions[currentPage];
+    const clickSound = new Audio('/select-sound-121244.mp3');
+    clickSound.preload = 'auto'; // Preload the audio file
+
 
     function getCharacter() {
         const body: DaterTypeRequest = {
@@ -78,8 +79,8 @@ export default function DatingQuestions(){
 
 
     function optionClicked(currentPage: number, optionIndex: number){
-        const clickSound = new Audio ('/select-sound-121244.mp3')
-        clickSound.play()
+        clickSound.currentTime = 0;
+        clickSound.play().catch(e => console.log('Audio play failed:', e));
         setSelectedOptions((prev=>({
             ...prev,
                [currentPage]:optionIndex
@@ -104,15 +105,13 @@ export default function DatingQuestions(){
                         <Progress value={progress} className="h-[21px] mb-[40px] mt-[26px] md:mt-[30px] md:mb-[46px]"/>
                         <div className="bg-[#EBEBEB4D] w-full md:w-full md:max-w-[508px] px-3 py-3 flex  items-center justify-center rounded-[26px] md:rounded-[40px] border-2 border-[#DEE4FF2E]   ">
                             <div className="bg-white px-5 py-[38px] md:pb-[50px] md:max-w-[476px]  rounded-[18px] md:rounded-[32px]">
-                                {currentQuestions2?.map((item:Question,questionIndex)=>{
-                                    console.log(currentQuestions2)
-                                    return(
-                                        <div key={questionIndex}>
+                                {currentQuestion && (
+                                        <div>
                                             <div className={"text-[#003A58] font-[Satoshi-Bold] text-base md:text-xl"}>
-                                                {item.question}
+                                                {currentQuestion.question}
                                             </div>
                                             <div className={"text-[#646363] font-[Satoshi-Bold] cursor-pointer mt-9 flex flex-col gap-2 text-sm md:text-base "}>
-                                                {item.options.map((item, optionIndex)=>{
+                                                {currentQuestion.options.map((item, optionIndex)=>{
                                                     const isSelected =  selectedOptions[currentPage] === optionIndex;
                                                     // console.log(optionIndex)
                                                     // console.log("Selected options is:",selectedOptions[currentPage])
@@ -126,8 +125,9 @@ export default function DatingQuestions(){
                                                 })}
                                             </div>
                                         </div>
-                                    )
-                                })}
+                                )}
+
+
                             </div>
                         </div>
                         <DefaultButton shake={isNotSelected} customClass={`w-full h-[56px] md:h-[68px] max-w-[232px] md:mt-4 md:max-w-[444px] bottom-[calc(20px+env(safe-area-inset-bottom))]`}  style={{marginTop:"36px", marginBottom:'8px'}} onClick={()=>goToNextQuestion()} text={questionCount===8?"Get Result":"Continue"} />

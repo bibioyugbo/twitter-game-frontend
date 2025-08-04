@@ -376,12 +376,12 @@ export default function DatingAnswer (){
                             {
                                 loading? <Loader showLoader={loading}/>:
                                     <div className={"no-border flex flex-col items-center"}>
-                                        <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
+                                        <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] md:rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
                                         <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
                                         <div className="bg-white p-5 pb-12 flex flex-col items-center rounded-[18px] md:w-[476px] w-full">
                                             <p className={"no-border  text-[#A6A5A5] text-base"}>you are {daterType?.name !== "Difficult to Date 🐍"? "a": ""}</p>
                                             <p className={"no-border  text-[#010101] my-3 font-[Recoleta-Bold] text-3xl"}>{daterType?.name}</p>
-                                            <p className={"no-border text-[#646363] font-medium text-base"}>{daterType?.description}</p>
+                                            <p className={"no-border text-[#646363] font-medium text-base md:text-xl "}>{daterType?.description}</p>
                                         </div>
                                     </div>
                                         <div ref={buttonsRef}  className={" no-border flex gap-2 mt-8"}>
