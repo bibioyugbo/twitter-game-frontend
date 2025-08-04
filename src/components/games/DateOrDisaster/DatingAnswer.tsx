@@ -62,6 +62,17 @@ export default function DatingAnswer (){
         }
     };
 
+    const forceRepaint = () => {
+        return new Promise<void>(resolve => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    void document.body.offsetHeight; // Force reflow
+                    setTimeout(resolve, 500);  // Give browser extra time
+                });
+            });
+        });
+    };
+
     const shareWithImage = async () => {
         const node = resultRef.current;
         const buttons = buttonsRef.current;
@@ -129,6 +140,18 @@ export default function DatingAnswer (){
         }
     };
 
+    const prepareAndShare = async () => {
+        // Ensure fonts are loaded
+        await document.fonts.load('bold 1rem "Recoleta-Bold"');
+        await document.fonts.ready;
+
+        // Force browser to repaint everything properly
+        await forceRepaint();
+
+        // Now do the actual share
+        await shareWithImage();
+    };
+
     useEffect(() => {
         if (daterType && !isDomReady) {
             const prepareDOM = async () => {
@@ -192,7 +215,7 @@ export default function DatingAnswer (){
                                         <button onClick={goToStart} className={"no-border md:hidden bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-7 w-7"} src={reverseImg} alt={""}/>
                                         </button>
-                                        <button disabled={!isDomReady} onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                        <button disabled={!isDomReady} onClick={prepareAndShare} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-6 w-6  md:h-[25px] md:w-[25px]"} src={shareImg} alt={""}/>
                                         </button>
 
