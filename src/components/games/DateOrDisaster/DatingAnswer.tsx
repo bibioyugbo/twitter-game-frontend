@@ -18,6 +18,8 @@ export default function DatingAnswer (){
     const buttonsRef = useRef<HTMLDivElement>(null)
     const navigate = useNavigate()
     const location = useLocation();
+    const [isDomReady, setIsDomReady] = useState(false);
+
     // const [showButton, setShowButton] = useState(false);
 
     // const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -27,11 +29,6 @@ export default function DatingAnswer (){
     const { daterType: reduxDaterType } = useSelector((state: RootState) => state.daterType);
 
     const daterType = routeData?.daterType || reduxDaterType;
-    const isPreloaded = routeData?.preloaded || false;
-
-    const [isReady, setIsReady] = useState(isPreloaded);
-
-
 
     const goToStart=()=>{
         navigate("/")
@@ -68,6 +65,11 @@ export default function DatingAnswer (){
     const shareWithImage = async () => {
         const node = resultRef.current;
         const buttons = buttonsRef.current;
+
+        if (!isDomReady) {
+            console.warn("Preparing your results");
+            return;
+        }
 
         if (!node || !buttons) {
             console.error(`Missing DOM references`);
@@ -126,13 +128,13 @@ export default function DatingAnswer (){
             if (buttons) buttons.style.display = "flex";
         }
     };
+
     useEffect(() => {
-        if (daterType && !isReady) {
-            const prepareForSharing = async () => {
+        if (daterType && !isDomReady) {
+            const prepareDOM = async () => {
                 await document.fonts.load('bold 1rem "Recoleta-Bold"');
                 await document.fonts.ready;
 
-                // Ensure all images are fully loaded
                 const images = document.images;
                 for (const img of images) {
                     if (!img.complete) {
@@ -143,15 +145,19 @@ export default function DatingAnswer (){
                     }
                 }
 
-                // Tiny delay to allow DOM to stabilize visually
-                await new Promise<void>(resolve => setTimeout(resolve, 300));
+                // Force two animation frames to guarantee DOM layout is fully flushed
+                await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-                setIsReady(true);
+                // Tiny buffer to be extra safe
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                setIsDomReady(true);
             };
 
-            prepareForSharing();
+            prepareDOM();
         }
-    }, [daterType, isReady]);
+    }, [daterType, isDomReady]);
+
 
 
     return(
@@ -162,7 +168,7 @@ export default function DatingAnswer (){
 
                         <div className={" no-border mt-[20px] justify-center flex-1 flex gap-4 flex-col w-full items-center"}>
                             {
-                                (!daterType || !isReady) ? <Loader showLoader={true}/>:
+                                (!daterType || !isDomReady) ? <Loader showLoader={true}/>:
                                     <div className={"no-border flex flex-col items-center"}>
                                         <div  className="bg-[#EBEBEB1A] px-3 py-3 w-full flex gap-4 flex-col items-center  rounded-[26px] md:rounded-[40px] border-[2.14px] border-[#DEE4FF2E]  md:w-[508px] ">
                                         <img src={dateIcon} className={"no-border  my-3"} width={236} height={119} alt={""}/>
@@ -186,7 +192,7 @@ export default function DatingAnswer (){
                                         <button onClick={goToStart} className={"no-border md:hidden bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-7 w-7"} src={reverseImg} alt={""}/>
                                         </button>
-                                        <button disabled={!isReady} onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
+                                        <button disabled={!isDomReady} onClick={shareWithImage} className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}>
                                             <img className={"no-border h-6 w-6  md:h-[25px] md:w-[25px]"} src={shareImg} alt={""}/>
                                         </button>
 
