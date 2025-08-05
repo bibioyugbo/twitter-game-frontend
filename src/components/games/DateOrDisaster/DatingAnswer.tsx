@@ -373,7 +373,7 @@ export default function DatingAnswer (){
                                     <div ref={buttonsRef} className={"no-border flex gap-2 mt-8"}>
                                         <button
                                             onClick={goToStart}
-                                            className={"no-border md:hidden bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}
+                                            className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px]"}
                                         >
                                             <img className={"no-border h-7 w-7"} src={reverseImg} alt={""}/>
                                         </button>
@@ -381,7 +381,7 @@ export default function DatingAnswer (){
                                         <button
                                             disabled={!isFullyRendered || isSharing}
                                             onClick={shareWithImage}
-                                            className={"no-border bg-[#0D0735] cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"}
+                                            className={"no-border bg-[#0D0735] md:hidden cursor-pointer hover:scale-105 transition-transform flex items-center justify-center rounded-[64px] h-[44px] w-[44px] md:h-[64px] md:w-[64px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"}
                                             title={!isFullyRendered ? "Preparing content..." : "Share result"}
                                         >
                                             {isSharing ? (
