@@ -25,7 +25,8 @@ export default function DateOrDisasterLandingPage(){
         <>
             <div className={'no-border h-dvh app-wrapper date-or-disaster p-5 flex items-center flex-col  w-full '}>
                 <div className={"flex flex-col flex-1 items-center justify-center"}>
-                    <img src={"https://raw.githubusercontent.com/bibioyugbo/my-assets/main/logo.svg"}  alt="Logo"
+                    <img src={"https://raw.githubusercontent.com/bibioyugbo/my-assets/main/logo.svg"} loading="lazy"
+                         decoding="async"  alt="Logo"
                          className="h-[295px] md:h-[474px] w-auto"
                     />
                     <p className={"text-white font-[Satoshi-Bold] md:max-w-[412px] text-base text-center"}> Are you a dream partner or just pure
